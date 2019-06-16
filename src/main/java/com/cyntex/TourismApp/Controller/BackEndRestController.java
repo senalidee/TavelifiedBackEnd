@@ -1,14 +1,12 @@
 package com.cyntex.TourismApp.Controller;
 
 
-import com.cyntex.TourismApp.Beans.RatingsProfileRequestBean;
-import com.cyntex.TourismApp.Beans.RegistrationRequestBean;
-import com.cyntex.TourismApp.Beans.ShopDetailsRequestBean;
+import com.cyntex.TourismApp.Beans.*;
 import com.cyntex.TourismApp.Logic.FoodRequestHandler;
 import com.cyntex.TourismApp.Logic.RatingProfileRequestHandler;
+import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.RegistrationRequestService;
 import com.cyntex.TourismApp.Util.JSONHandler;
-import com.cyntex.TourismApp.Beans.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -27,6 +25,9 @@ public class BackEndRestController {
 
     @Autowired
     private RatingProfileRequestHandler ratingProfileRequestHandler;
+
+    @Autowired
+    private TestRequestHandler testRequestHandler;
 
 
     @CrossOrigin()
@@ -51,6 +52,14 @@ public class BackEndRestController {
         RatingsProfileRequestBean shopDetailsRequestBean = JSONHandler.parseFromJSON(data, RatingsProfileRequestBean.class);
         BaseResponse response = ratingProfileRequestHandler.handle(shopDetailsRequestBean);
         return JSONHandler.parseToJSON(response);
+    }
+
+    @CrossOrigin()
+    @RequestMapping(value="/test/save_text",method= RequestMethod.POST)
+    public String saveTextRequest(@RequestBody String data) throws Exception {
+        TestBean testBean = JSONHandler.parseFromJSON(data, TestBean.class);
+        testRequestHandler.handle(testBean);
+        return "{SUCCESS}";
     }
 
     @CrossOrigin()
