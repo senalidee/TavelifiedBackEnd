@@ -25,9 +25,16 @@ public class UserProfileDAO {
 
 	    @Transactional
 	    public RegistrationRequestBean getUserRatingsProfile(String username) {
-	    	RegistrationRequestBean queryData = (RegistrationRequestBean) dataSourceManager.getJdbcTemplate().queryForObject(
-	    			ProfileFetchQuery, new Object[]{username}, new BeanPropertyRowMapper(RegistrationRequestBean.class));
-	    			
+	    	System.out.println("Start");
+	    	RegistrationRequestBean queryData = dataSourceManager.getJdbcTemplate().query(
+	    			ProfileFetchQuery, new Object[]{username}, 
+	                (rs, rowNum) -> new RegistrationRequestBean(
+                    rs.getString("username"),rs.getString("first_name"),rs.getString("last_name"),rs.getString("gender"),
+                    rs.getString("country"),rs.getString("contact_number"),rs.getString("pwd_salt"),
+                     rs.getString("password"), rs.getString("picture_link"),rs.getString("location_id")
+                    )
+	                ).get(0);
+	    			System.out.println("return user name "+queryData.getUsername());
 //	    			dataSourceManager.getJdbcTemplate().query(
 //	               ProfileFetchQuery,new Object[]{username},new int[]{Types.VARCHAR},
 //	                (rs, rowNum) -> new RegistrationRequestBean(
@@ -37,18 +44,10 @@ public class UserProfileDAO {
 //	                         rs.getString("password")
 //	                         )
 //	        );
+	    //			System.out.println("end");
 	        return queryData;
 	    }
-//		this.fbId = fbId;
-//		this.firstName = firstName;
-//		this.lastName = lastName;
-//		this.gender = gender;
-//		this.birthday = birthday;
-//		this.country = country;
-//		this.email = email;
-//		this.picture = picture;
-//		this.fbToken = fbToken;
-//		this.password = password;
+
 	
 	
 }

@@ -16,18 +16,17 @@ public class RegistrationRequestHandler {
         BaseResponse response = new BaseResponse();
         try{
             registrationDAO.addNewRecord(
-                    requestBean.getFbId(),
+                    requestBean.getUsername(),
                     requestBean.getFirstName(),
                     requestBean.getLastName(),
                     requestBean.getGender(),
                     requestBean.getCountry(),
-                    "",
-                    requestBean.getEmail(),
-                    requestBean.getBirthday(),
-                    requestBean.getFbId(),
-                    requestBean.getPicture(),
-                    requestBean.getFbToken().toString(),
-                    requestBean.getPassword());
+                    requestBean.getContactNumber(),
+                    requestBean.getPwdSalt(),
+                    requestBean.getPassword(),
+                    requestBean.getPictureLink(),
+                    requestBean.getLocationId()
+                    );
             response.setStatus("SUCCESS");
         }catch (Exception e) {
             response.setStatus("FAILED: Cannot register this user");
