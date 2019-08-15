@@ -1,12 +1,18 @@
 package com.cyntex.TourismApp.Controller;
 
 
+import java.util.List;
+
 import com.cyntex.TourismApp.Beans.*;
+import com.cyntex.TourismApp.Logic.AddFriendRequestHandler;
+import com.cyntex.TourismApp.Logic.CreateChatGroupRequestHandler;
+import com.cyntex.TourismApp.Logic.DiscoverTouristFriendRequestHandler;
 import com.cyntex.TourismApp.Logic.FoodRequestHandler;
 import com.cyntex.TourismApp.Logic.RatingProfileRequestHandler;
 import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.RegistrationRequestService;
 import com.cyntex.TourismApp.Util.JSONHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -28,6 +34,20 @@ public class BackEndRestController {
 
     @Autowired
     private TestRequestHandler testRequestHandler;
+    
+    @Autowired
+    private DiscoverTouristFriendRequestHandler discoverTouristFriendRequestHandler;
+    
+    @Autowired
+    private CreateChatGroupRequestHandler createChatGroupRequestHandler;
+    
+    @Autowired
+    private AddFriendRequestHandler addFriendRequestHandler;
+    
+    @RequestMapping(value="/serviceCheck",method= RequestMethod.GET)
+    public String serviceCheck() throws Exception{
+    	return JSONHandler.parseToJSON("Service is ok");
+    }
 
 
     @CrossOrigin()
@@ -88,6 +108,36 @@ public class BackEndRestController {
 //        ScoreUpdateRequestBean scoreUpdateRequest = JSONHandler.parseFromJSON(data,ScoreUpdateRequestBean.class);
 //        BaseResponse response = new BaseResponse();
         return "NOT IMPL";
+    }
+    @CrossOrigin()
+    @RequestMapping(value="/discoverTouristFriends", method= RequestMethod.POST)
+    public String discoverTouristFriend(@RequestBody String data)throws Exception{
+    	//there should be a bean
+    	DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean = JSONHandler.parseFromJSON(data, DiscoverTouristFriendRequestBean.class);
+    	List<RegistrationRequestBean> response = discoverTouristFriendRequestHandler.handle(discoverTouristFriendRequestBean);
+        return JSONHandler.parseToJSON(response);
+    	
+    }
+    
+    
+    @CrossOrigin()
+    @RequestMapping(value="/createChatGroup" , method = RequestMethod.POST)
+    public String createChatGroup(@RequestBody String data)throws Exception{
+    	CreateChatGroupRequestBean createChatGroupRequestBean= JSONHandler.parseFromJSON(data, CreateChatGroupRequestBean.class);
+    	BaseResponse response= createChatGroupRequestHandler.handle(createChatGroupRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/addTouristFriend", method= RequestMethod.POST)
+    public String AddTouristFriend(@RequestBody String data)throws Exception{
+    	AddFriendRequestBean addFriendRequestBean = JSONHandler.parseFromJSON(data, AddFriendRequestBean.class);
+    	BaseResponse response = addFriendRequestHandler.handle(addFriendRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
     }
 
 

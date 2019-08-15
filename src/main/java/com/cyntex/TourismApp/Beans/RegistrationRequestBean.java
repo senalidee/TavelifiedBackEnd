@@ -1,7 +1,8 @@
 package com.cyntex.TourismApp.Beans;
 
 public class RegistrationRequestBean {
-    private String fbId;
+
+	private String fbId;
     private String firstName;
     private String lastName;
     private String gender;
