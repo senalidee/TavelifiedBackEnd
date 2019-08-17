@@ -25,7 +25,7 @@ public class UserProfileDAO {
 
 	    @Transactional
 	    public RegistrationRequestBean getUserRatingsProfile(String username) {
-	    	System.out.println("Start");
+	    
 	    	RegistrationRequestBean queryData = dataSourceManager.getJdbcTemplate().query(
 	    			ProfileFetchQuery, new Object[]{username}, 
 	                (rs, rowNum) -> new RegistrationRequestBean(

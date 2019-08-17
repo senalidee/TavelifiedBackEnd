@@ -36,11 +36,11 @@ public class DiscoverTouristAttractionRequestHandler {
 			List<DiscoverTouristAttractionQueryResponseBean> discoverTouristAttractionQuaryResponseBeanList =touristAttractionDAO.getUserRatingsProfile();
 			double currentLongitude=discoverTouristAttractionRequestBean.getLongitude();
 			double currentLatitude=discoverTouristAttractionRequestBean.getLatitude();
-			//System.out.println("currentLongitude "+currentLongitude+ ","+ "currentLatitude "+currentLatitude);
+			
 			for(DiscoverTouristAttractionQueryResponseBean discoverTouristAttractionQueryResponseBean:discoverTouristAttractionQuaryResponseBeanList){
 				double longitude =discoverTouristAttractionQueryResponseBean.getLongitude();
 				double latitude =discoverTouristAttractionQueryResponseBean.getLatitude();
-			// 	System.out.println("longitude "+longitude+ ","+ "latitude "+latitude);
+		
 				if(isAttractivePlace(currentLatitude,currentLongitude,latitude,longitude)){
 					discoverTouristAttractionPlaceQueryResponseBean=touristAttractionPlaceDAO.getLocationDetails(discoverTouristAttractionQueryResponseBean.getLocationId());
 					discoverTouristAttractionResponseBeanList.add(discoverTouristAttractionPlaceQueryResponseBean);
@@ -52,7 +52,7 @@ public class DiscoverTouristAttractionRequestHandler {
 			responseBean.setStatus("FAIL "+e.getMessage());
 			
 	
-			// 
+			
 		}
 		responseBean.setDiscoverTouristAttractionPlaceQueryResponseBean(discoverTouristAttractionResponseBeanList);
 		return responseBean;

@@ -13,7 +13,7 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 
 @Component
 public class TouristAttractionDAO {
-	public static final String locationDetailFetcQuary="select * from location";
+	public static final String locationDetailFetcQuery="select * from location";
 	
 
     @Autowired
@@ -23,7 +23,7 @@ public class TouristAttractionDAO {
     public List<DiscoverTouristAttractionQueryResponseBean> getUserRatingsProfile() {
 
     	List<DiscoverTouristAttractionQueryResponseBean> queryData = dataSourceManager.getJdbcTemplate().query(
-    			locationDetailFetcQuary, 
+    			locationDetailFetcQuery, 
                 (rs, rowNum) -> new DiscoverTouristAttractionQueryResponseBean(rs.getString("location_id"),rs.getDouble("lng"),rs.getDouble("lat")));
 	
     	return queryData;
