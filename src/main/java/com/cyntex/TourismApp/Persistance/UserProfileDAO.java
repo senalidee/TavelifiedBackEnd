@@ -34,17 +34,7 @@ public class UserProfileDAO {
                      rs.getString("password"), rs.getString("picture_link"),rs.getString("location_id")
                     )
 	                ).get(0);
-	    			System.out.println("return user name "+queryData.getUsername());
-//	    			dataSourceManager.getJdbcTemplate().query(
-//	               ProfileFetchQuery,new Object[]{username},new int[]{Types.VARCHAR},
-//	                (rs, rowNum) -> new RegistrationRequestBean(
-//	                        rs.getString("fbId"),rs.getString("firstName"),rs.getString("lastName"),rs.getString("gender"),
-//	                        rs.getString("birthday"),rs.getString("country"),rs.getString("email"),rs.getString("picture"),
-//	                        (FBTokenBean)rs.getObject("fb_token"),
-//	                         rs.getString("password")
-//	                         )
-//	        );
-	    //			System.out.println("end");
+
 	        return queryData;
 	    }
 

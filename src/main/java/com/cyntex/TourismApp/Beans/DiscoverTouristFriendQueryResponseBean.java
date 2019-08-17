@@ -1,8 +1,8 @@
 package com.cyntex.TourismApp.Beans;
 
-public class DiscoverTouristFriendQuaryResponseBean {
+public class DiscoverTouristFriendQueryResponseBean {
 	
-	public DiscoverTouristFriendQuaryResponseBean(
+	public DiscoverTouristFriendQueryResponseBean(
 			String username,double averageRating) {
 		
 		this.averageRating = averageRating;

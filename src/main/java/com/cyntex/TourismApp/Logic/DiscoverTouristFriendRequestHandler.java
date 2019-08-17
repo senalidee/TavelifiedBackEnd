@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
-import com.cyntex.TourismApp.Beans.DiscoverTouristFriendQuaryResponseBean;
+import com.cyntex.TourismApp.Beans.DiscoverTouristFriendQueryResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristFriendRequestBean;
-import com.cyntex.TourismApp.Beans.RatingProfileFetchQuaryBasedOnCategoryBean;
+import com.cyntex.TourismApp.Beans.DiscoverTouristFriendResponseBean;
+import com.cyntex.TourismApp.Beans.RatingProfileFetchQueryBasedOnCategoryBean;
 import com.cyntex.TourismApp.Beans.RatingsProfileQueryResponseBean;
 import com.cyntex.TourismApp.Beans.RatingsProfileRequestBean;
 import com.cyntex.TourismApp.Beans.RatingsProfileResponseBean;
@@ -31,11 +32,15 @@ public class DiscoverTouristFriendRequestHandler {
 	@Autowired
 	private UserProfileDAO userProfileDAO;
 
-	public List<RegistrationRequestBean> handle(
-			DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean) {
-
-		RatingsProfileResponseBean responseBean = new RatingsProfileResponseBean();
+	public BaseResponse handle(
+		DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean) {
+		
+        DiscoverTouristFriendResponseBean responseBean= new DiscoverTouristFriendResponseBean();
+        
+		RatingsProfileResponseBean ProfileResponseBean = new RatingsProfileResponseBean();
+		
 		List<UserRating> requestedUserRatingList = new ArrayList<UserRating>();
+		
 		List<RegistrationRequestBean> touristFriendProfileList = new ArrayList<RegistrationRequestBean>();
 		String requesterUsername=discoverTouristFriendRequestBean.getUsername();
 		// System.out.println("category1 ");
@@ -51,18 +56,18 @@ public class DiscoverTouristFriendRequestHandler {
 					.RatingProfileResponse(queryResponse).getUserRatings();
 			System.out.println("userRatingList "
 					+ requestedUserRatingList.size());
-			responseBean = userRatingCalculator
+			ProfileResponseBean = userRatingCalculator
 					.RatingProfileResponse(queryResponse);
 			ArrayList<String> counterBucket = new ArrayList<String>();
 			for (UserRating userRating : requestedUserRatingList) {
 				System.out.println("category " + userRating.getCategory());
 				System.out.println("username "
 						+ discoverTouristFriendRequestBean.getUsername());
-				List<DiscoverTouristFriendQuaryResponseBean> discoverTouristFriendQuaryResponseBeanList = userRatingsProfileDAO.getAverageRating(userRating.getCategory(),requesterUsername);
+				List<DiscoverTouristFriendQueryResponseBean> discoverTouristFriendQuaryResponseBeanList = userRatingsProfileDAO.getAverageRating(userRating.getCategory(),requesterUsername);
               
-				for (DiscoverTouristFriendQuaryResponseBean discoverTouristFriendQuaryResponseBean : discoverTouristFriendQuaryResponseBeanList) {
-					double averageRating = discoverTouristFriendQuaryResponseBean.getAverageRating();
-					String usernameOfQuaryResponseBean=discoverTouristFriendQuaryResponseBean.getUsername();
+				for (DiscoverTouristFriendQueryResponseBean discoverTouristFriendQueryResponseBean : discoverTouristFriendQuaryResponseBeanList) {
+					double averageRating = discoverTouristFriendQueryResponseBean.getAverageRating();
+					String usernameOfQuaryResponseBean=discoverTouristFriendQueryResponseBean.getUsername();
 					System.out.println("averageRating " + averageRating);
 					if ((!counterBucket.contains(usernameOfQuaryResponseBean))&& averageRating >= userRating.getRating() - 1
 							&& averageRating <= userRating.getRating() + 1) {
@@ -70,7 +75,7 @@ public class DiscoverTouristFriendRequestHandler {
 						touristFriendProfileList.add(userProfileDAO
 										.getUserRatingsProfile(usernameOfQuaryResponseBean));
 						if (touristFriendProfileList.size() >= 10) {
-							return touristFriendProfileList;
+							break;
 						}
 					}
 
@@ -78,13 +83,13 @@ public class DiscoverTouristFriendRequestHandler {
 
 			}
 			// responseBean=userRatingCalculator.RatingProfileResponse(queryResponse);
-			// responseBean.setStatus("SUCCESS");
+			 responseBean.setStatus("SUCCESS");
 		} catch (Exception e) {
-			// responseBean.setStatus("FAIL");
-			System.out.println(e);
+		    responseBean.setStatus("FAIL : "+e.getMessage());
+			//System.out.println(e);
 		}
-
-		return touristFriendProfileList;
+		responseBean.setRegistrationRequestBean(touristFriendProfileList);
+		return responseBean;
 
 		// List<UserRatings> requestedUserRatings =
 		// userRatingCalculator.handle(ratingsProfileRequestBean)

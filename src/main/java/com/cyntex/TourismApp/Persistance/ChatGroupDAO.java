@@ -13,7 +13,7 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 @Component
 public class ChatGroupDAO {
 	private static final String createChatGroupRequest=
-	//		chat_group_id	group_title	category	created_by	created_date
+
 			"insert into chat_group(chat_group_id,group_title,category,created_by,created_date) values (?,?,?,?,?)";
     @Autowired
     private DataSourceManager dataSourceManager;

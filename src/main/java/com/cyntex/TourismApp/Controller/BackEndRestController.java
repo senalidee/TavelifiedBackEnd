@@ -10,6 +10,10 @@ import com.cyntex.TourismApp.Logic.DiscoverTouristFriendRequestHandler;
 import com.cyntex.TourismApp.Logic.FoodRequestHandler;
 import com.cyntex.TourismApp.Logic.RatingProfileRequestHandler;
 import com.cyntex.TourismApp.Logic.TestRequestHandler;
+import com.cyntex.TourismApp.Services.AddtouristFriendService;
+import com.cyntex.TourismApp.Services.CreateChatGroupService;
+import com.cyntex.TourismApp.Services.DiscoverTouristAttractionService;
+import com.cyntex.TourismApp.Services.DiscoverTouristFriendService;
 import com.cyntex.TourismApp.Services.RegistrationRequestService;
 import com.cyntex.TourismApp.Util.JSONHandler;
 
@@ -36,13 +40,16 @@ public class BackEndRestController {
     private TestRequestHandler testRequestHandler;
     
     @Autowired
-    private DiscoverTouristFriendRequestHandler discoverTouristFriendRequestHandler;
+    private DiscoverTouristFriendService discoverTouristFriendService;
     
     @Autowired
-    private CreateChatGroupRequestHandler createChatGroupRequestHandler;
+    private CreateChatGroupService createChatGroupService;
     
     @Autowired
-    private AddFriendRequestHandler addFriendRequestHandler;
+    private AddtouristFriendService addtouristFriendService;
+    
+    @Autowired
+    private DiscoverTouristAttractionService discoverTouristAttractionService;
     
     @RequestMapping(value="/serviceCheck",method= RequestMethod.GET)
     public String serviceCheck() throws Exception{
@@ -114,7 +121,7 @@ public class BackEndRestController {
     public String discoverTouristFriend(@RequestBody String data)throws Exception{
     	//there should be a bean
     	DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean = JSONHandler.parseFromJSON(data, DiscoverTouristFriendRequestBean.class);
-    	List<RegistrationRequestBean> response = discoverTouristFriendRequestHandler.handle(discoverTouristFriendRequestBean);
+    	BaseResponse response = discoverTouristFriendService.discoverTouristFriend(discoverTouristFriendRequestBean);
         return JSONHandler.parseToJSON(response);
     	
     }
@@ -124,7 +131,7 @@ public class BackEndRestController {
     @RequestMapping(value="/createChatGroup" , method = RequestMethod.POST)
     public String createChatGroup(@RequestBody String data)throws Exception{
     	CreateChatGroupRequestBean createChatGroupRequestBean= JSONHandler.parseFromJSON(data, CreateChatGroupRequestBean.class);
-    	BaseResponse response= createChatGroupRequestHandler.handle(createChatGroupRequestBean);
+    	BaseResponse response= createChatGroupService.createChatGroup(createChatGroupRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     	
@@ -134,10 +141,18 @@ public class BackEndRestController {
     @RequestMapping(value="/addTouristFriend", method= RequestMethod.POST)
     public String AddTouristFriend(@RequestBody String data)throws Exception{
     	AddFriendRequestBean addFriendRequestBean = JSONHandler.parseFromJSON(data, AddFriendRequestBean.class);
-    	BaseResponse response = addFriendRequestHandler.handle(addFriendRequestBean);
+    	BaseResponse response = addtouristFriendService.addTouristFriend(addFriendRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/discoverTouristAttraction")
+    public String discoverTouristAttraction(@RequestBody String data) throws Exception{
+    	DiscoverTouristAttractionRequestBean discoverTouristFriendRequestBean= JSONHandler.parseFromJSON(data, DiscoverTouristAttractionRequestBean.class);
+    	BaseResponse response =discoverTouristAttractionService.discoverTouristAttraction(discoverTouristFriendRequestBean);
+    	return JSONHandler.parseToJSON(response);
     }
 
 

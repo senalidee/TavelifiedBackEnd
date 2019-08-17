@@ -1,7 +1,7 @@
 package com.cyntex.TourismApp.Beans;
 
-public class RatingProfileFetchQuaryBasedOnCategoryBean {
-	public RatingProfileFetchQuaryBasedOnCategoryBean(String userName) {
+public class RatingProfileFetchQueryBasedOnCategoryBean {
+	public RatingProfileFetchQueryBasedOnCategoryBean(String userName) {
 		this.userName = userName;
 	}
 
