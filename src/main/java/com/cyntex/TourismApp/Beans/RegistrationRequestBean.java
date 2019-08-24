@@ -1,16 +1,22 @@
 package com.cyntex.TourismApp.Beans;
 
 public class RegistrationRequestBean {
-    private String fbId;
+    private String email;
     private String firstName;
     private String lastName;
-    private String gender;
-    private String birthday;
-    private String country;
-    private String email;
-    private String picture;
-    private FBTokenBean fbToken;
+    private String phone;
     private String password;
+    private String country;
+    private String gender;
+    private String image;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -28,20 +34,28 @@ public class RegistrationRequestBean {
         this.lastName = lastName;
     }
 
-    public String getGender() {
-        return gender;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getBirthday() {
-        return birthday;
+    public String getPassword() {
+        return password;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getCountry() {
@@ -52,44 +66,11 @@ public class RegistrationRequestBean {
         this.country = country;
     }
 
-    public String getEmail() {
-        return email;
+    public String getGender() {
+        return gender;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-
-    public String getFbId() {
-        return fbId;
-    }
-
-    public void setFbId(String fbId) {
-        this.fbId = fbId;
-    }
-
-    public FBTokenBean getFbToken() {
-        return fbToken;
-    }
-
-    public void setFbToken(FBTokenBean fbToken) {
-        this.fbToken = fbToken;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
