@@ -2,6 +2,7 @@ package com.cyntex.TourismApp.Persistance;
 
 import java.sql.Types;
 import java.time.LocalDate;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class ChatGroupDAO {
     @Transactional
     public void createChatGroup(int groupId, String title, String category, String createdBy){
     	 dataSourceManager.getJdbcTemplate().update(createChatGroupRequest,
-                 new Object[] {groupId,title,category,createdBy,LocalDate.now()},
+                 new Object[] {groupId,title,category,createdBy,new Date()},
                  new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.DATE});
     	
     }

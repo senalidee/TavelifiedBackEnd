@@ -10,10 +10,12 @@ import com.cyntex.TourismApp.Logic.DiscoverTouristFriendRequestHandler;
 import com.cyntex.TourismApp.Logic.FoodRequestHandler;
 import com.cyntex.TourismApp.Logic.RatingProfileRequestHandler;
 import com.cyntex.TourismApp.Logic.TestRequestHandler;
+import com.cyntex.TourismApp.Services.AddFriendToChatGroupService;
 import com.cyntex.TourismApp.Services.AddtouristFriendService;
 import com.cyntex.TourismApp.Services.CreateChatGroupService;
 import com.cyntex.TourismApp.Services.DiscoverTouristAttractionService;
 import com.cyntex.TourismApp.Services.DiscoverTouristFriendService;
+import com.cyntex.TourismApp.Services.MessageService;
 import com.cyntex.TourismApp.Services.RegistrationRequestService;
 import com.cyntex.TourismApp.Util.JSONHandler;
 
@@ -50,6 +52,13 @@ public class BackEndRestController {
     
     @Autowired
     private DiscoverTouristAttractionService discoverTouristAttractionService;
+    
+    @Autowired
+    private MessageService messageService;
+   
+    @Autowired
+    private AddFriendToChatGroupService addFriendToChatGroupService;
+    
     
     @RequestMapping(value="/serviceCheck",method= RequestMethod.GET)
     public String serviceCheck() throws Exception{
@@ -155,7 +164,36 @@ public class BackEndRestController {
     	return JSONHandler.parseToJSON(response);
     }
 
-
+    @CrossOrigin()
+    @RequestMapping(value="/addFriendToChatGroup")
+    public String addFriendToChatGroup(@RequestBody String data) throws Exception{
+    	AddFriendToChatGroupRequestBean addFriendToChatGroup = JSONHandler.parseFromJSON(data, AddFriendToChatGroupRequestBean.class);
+    	BaseResponse response =addFriendToChatGroupService.addTouristFriend(addFriendToChatGroup);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/sendMessage" , method= RequestMethod.POST)
+    public String sendMesssage(@RequestBody String data) throws Exception{
+    	SendMessageRequestBean sendMessageRequestBean = JSONHandler.parseFromJSON(data, SendMessageRequestBean.class);
+    	BaseResponse response= messageService.sendMessage(sendMessageRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
+    
+    
+    @CrossOrigin()
+    @RequestMapping(value="/getMessage/{chatId}" , method= RequestMethod.GET)
+    public String getMessage(@PathVariable("chatId") int chatId) throws Exception{
+    	BaseResponse response= messageService.getMessage(chatId);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
+    }
+    
+    
 
 
 }
