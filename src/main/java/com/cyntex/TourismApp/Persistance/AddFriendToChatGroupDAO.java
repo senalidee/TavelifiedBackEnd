@@ -24,6 +24,9 @@ public class AddFriendToChatGroupDAO {
 	private  static final String addFriendRequest=
 			"insert into group_participant(username,chat_group_id,added_by,avatar) values (?,?,?,?)";
 	
+	private  static final String deleteFriendRequest=
+			"delete from group_participant where  username = ? and chat_group_id = ?";
+	
 	private  static final String addGroupCreator=
 			"insert into group_participant(username,chat_group_id,is_admin,avatar) values (?,?,?,?)";
 	
@@ -67,15 +70,15 @@ public class AddFriendToChatGroupDAO {
 		
 	}
 	
-//	@Transactional
-//	public void isAdmin(String username){
-//		
-//		dataSourceManager.getJdbcTemplate().queryForList(addGroupCreator,
-//                new Object[] {username},
-//                new int[]{Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR});
-//                
-//		
-//	}
+	@Transactional
+	public void deleteFriend(String username , int chatGroupId){
+		
+		dataSourceManager.getJdbcTemplate().update(deleteFriendRequest,
+                new Object[] {username, chatGroupId},
+                new int[]{Types.VARCHAR,Types.INTEGER});
+                
+		
+	}
 	
 	@Transactional
 	public boolean isAdmin(String addedby, int groupId){

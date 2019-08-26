@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 
 
 
+
 import com.cyntex.TourismApp.Beans.AddFriendToChatGroupRequestBean;
 import com.cyntex.TourismApp.Beans.BaseResponse;
+import com.cyntex.TourismApp.Beans.DeleteChatGroupMemberRequestBean;
 import com.cyntex.TourismApp.Logic.AddFriendToChatGroupRequestHandler;
 @Service 
 
@@ -16,8 +18,13 @@ public class AddFriendToChatGroupService {
 	@Autowired
 	AddFriendToChatGroupRequestHandler addFriendRequestHandler;
 	
-	public BaseResponse addTouristFriend(AddFriendToChatGroupRequestBean addFriendRequestBean){
+	public BaseResponse addFriend(AddFriendToChatGroupRequestBean addFriendRequestBean){
 		return addFriendRequestHandler.handle(addFriendRequestBean);
+	}
+	
+	public BaseResponse deleteMember(DeleteChatGroupMemberRequestBean deleteChatGroupMemberRequestBean){
+		
+		return addFriendRequestHandler.deleteMember(deleteChatGroupMemberRequestBean);
 	}
 
 }
