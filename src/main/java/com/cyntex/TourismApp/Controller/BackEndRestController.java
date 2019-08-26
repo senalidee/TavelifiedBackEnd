@@ -1,6 +1,7 @@
 package com.cyntex.TourismApp.Controller;
 
 
+<<<<<<< HEAD
 import java.util.List;
 
 import com.cyntex.TourismApp.Beans.*;
@@ -19,6 +20,18 @@ import com.cyntex.TourismApp.Services.MessageService;
 import com.cyntex.TourismApp.Services.RegistrationRequestService;
 import com.cyntex.TourismApp.Util.JSONHandler;
 
+=======
+import com.cyntex.TourismApp.Beans.BaseResponse;
+import com.cyntex.TourismApp.Beans.LoginRequestBean;
+import com.cyntex.TourismApp.Beans.RatingsProfileRequestBean;
+import com.cyntex.TourismApp.Beans.RegistrationRequestBean;
+import com.cyntex.TourismApp.Logic.FoodRequestHandler;
+import com.cyntex.TourismApp.Logic.RatingProfileRequestHandler;
+import com.cyntex.TourismApp.Logic.TestRequestHandler;
+import com.cyntex.TourismApp.Services.AuthService;
+import com.cyntex.TourismApp.Util.FSManager;
+import com.cyntex.TourismApp.Util.JSONHandler;
+>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -30,7 +43,7 @@ import org.springframework.web.bind.annotation.*;
 public class BackEndRestController {
 
     @Autowired
-    private RegistrationRequestService registrationRequestService;
+    private AuthService authService;
 
     @Autowired
     private FoodRequestHandler foodRequestHandler;
@@ -40,6 +53,7 @@ public class BackEndRestController {
 
     @Autowired
     private TestRequestHandler testRequestHandler;
+<<<<<<< HEAD
     
     @Autowired
     private DiscoverTouristFriendService discoverTouristFriendService;
@@ -64,23 +78,57 @@ public class BackEndRestController {
     public String serviceCheck() throws Exception{
     	return JSONHandler.parseToJSON("Service is ok");
     }
+=======
+>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
 
 
     @CrossOrigin()
     @RequestMapping(value="/register",method= RequestMethod.POST)
-    public String requestData(@RequestBody String data) throws Exception {
-        RegistrationRequestBean scoreBoardRequest = JSONHandler.parseFromJSON(data, RegistrationRequestBean.class);
-        BaseResponse response = registrationRequestService.requestRegistration(scoreBoardRequest);
-        return JSONHandler.parseToJSON(response);
+    public String registerUser(@RequestBody String data) throws Exception {
+        try {
+            RegistrationRequestBean registrationRequestBean = JSONHandler.parseFromJSON(data, RegistrationRequestBean.class);
+            BaseResponse response = authService.requestRegistration(registrationRequestBean);
+            return JSONHandler.parseToJSON(response);
+        } catch (Exception e) {
+            BaseResponse response = new BaseResponse();
+            response.setStatus("FAILED: Invalid Request!");
+            e.printStackTrace();
+            return JSONHandler.parseToJSON(response);
+        }
     }
 
     @CrossOrigin()
-    @RequestMapping(value="/shops/list",method= RequestMethod.POST)
-    public String requestFoodShopData(@RequestBody String data) throws Exception {
-        ShopDetailsRequestBean shopDetailsRequestBean = JSONHandler.parseFromJSON(data, ShopDetailsRequestBean.class);
-        BaseResponse response = foodRequestHandler.handle(shopDetailsRequestBean);
-        return JSONHandler.parseToJSON(response);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String loginUser(@RequestBody String data) throws Exception {
+        try {
+            LoginRequestBean loginRequestBean = JSONHandler.parseFromJSON(data, LoginRequestBean.class);
+            BaseResponse response = authService.loginUser(loginRequestBean);
+            return JSONHandler.parseToJSON(response);
+        } catch (Exception e) {
+            BaseResponse response = new BaseResponse();
+            response.setStatus("FAILED: Invalid Request!");
+            e.printStackTrace();
+            return JSONHandler.parseToJSON(response);
+        }
     }
+
+    @CrossOrigin()
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    public byte[] getImage(@RequestParam("id") String imageID) throws Exception {
+        try {
+            return FSManager.retrieveImage(imageID);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+//    @CrossOrigin()
+//    @RequestMapping(value="/shops/list",method= RequestMethod.POST)
+//    public String requestFoodShopData(@RequestBody String data) throws Exception {
+//        ShopDetailsRequestBean shopDetailsRequestBean = JSONHandler.parseFromJSON(data, ShopDetailsRequestBean.class);
+//        BaseResponse response = foodRequestHandler.handle(shopDetailsRequestBean);
+//        return JSONHandler.parseToJSON(response);
+//    }
 
     @CrossOrigin()
     @RequestMapping(value="/user/rating_profile",method= RequestMethod.POST)
@@ -89,6 +137,14 @@ public class BackEndRestController {
         BaseResponse response = ratingProfileRequestHandler.handle(shopDetailsRequestBean);
         return JSONHandler.parseToJSON(response);
     }
+
+//    @CrossOrigin()
+//    @RequestMapping(value="/test/save_text",method= RequestMethod.POST)
+//    public String saveTextRequest(@RequestBody String data) throws Exception {
+//        TestBean testBean = JSONHandler.parseFromJSON(data, TestBean.class);
+//        testRequestHandler.handle(testBean);
+//        return "{SUCCESS}";
+//    }
 
     @CrossOrigin()
     @RequestMapping(value="/test/save_text",method= RequestMethod.POST)
@@ -121,8 +177,6 @@ public class BackEndRestController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value="/updateData",method= RequestMethod.POST)
     public String updateData(@RequestBody String data) throws Exception {
-//        ScoreUpdateRequestBean scoreUpdateRequest = JSONHandler.parseFromJSON(data,ScoreUpdateRequestBean.class);
-//        BaseResponse response = new BaseResponse();
         return "NOT IMPL";
     }
     @CrossOrigin()
