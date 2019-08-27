@@ -1,7 +1,7 @@
 package com.cyntex.TourismApp.Controller;
 
-
-<<<<<<< HEAD
+//
+//<<<<<<< HEAD
 import java.util.List;
 
 import com.cyntex.TourismApp.Beans.*;
@@ -17,10 +17,10 @@ import com.cyntex.TourismApp.Services.ChatGroupService;
 import com.cyntex.TourismApp.Services.DiscoverTouristAttractionService;
 import com.cyntex.TourismApp.Services.DiscoverTouristFriendService;
 import com.cyntex.TourismApp.Services.MessageService;
-import com.cyntex.TourismApp.Services.RegistrationRequestService;
+
 import com.cyntex.TourismApp.Util.JSONHandler;
 
-=======
+//=======
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.LoginRequestBean;
 import com.cyntex.TourismApp.Beans.RatingsProfileRequestBean;
@@ -31,7 +31,7 @@ import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.AuthService;
 import com.cyntex.TourismApp.Util.FSManager;
 import com.cyntex.TourismApp.Util.JSONHandler;
->>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
+//>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class BackEndRestController {
 
     @Autowired
     private TestRequestHandler testRequestHandler;
-<<<<<<< HEAD
+///<<<<<<< HEAD
     
     @Autowired
     private DiscoverTouristFriendService discoverTouristFriendService;
@@ -78,8 +78,8 @@ public class BackEndRestController {
     public String serviceCheck() throws Exception{
     	return JSONHandler.parseToJSON("Service is ok");
     }
-=======
->>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
+//=======
+//>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
 
 
     @CrossOrigin()
@@ -252,6 +252,15 @@ public class BackEndRestController {
     public String deleteMember(@RequestBody String data) throws Exception{
     	DeleteChatGroupMemberRequestBean deleteChatGroupMemberRequestBean = JSONHandler.parseFromJSON(data, DeleteChatGroupMemberRequestBean.class);
     	BaseResponse response= addFriendToChatGroupService.deleteMember(deleteChatGroupMemberRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/searchFriend/{firstname}" , method= RequestMethod.GET)
+    public String searchFriend(@PathVariable("firstname") String data) throws Exception{
+    //	DeleteChatGroupMemberRequestBean deleteChatGroupMemberRequestBean = JSONHandler.parseFromJSON(data, DeleteChatGroupMemberRequestBean.class);
+    	BaseResponse response= discoverTouristFriendService.searchFriend(data);
     	return JSONHandler.parseToJSON(response);
     	
     }

@@ -12,7 +12,7 @@ public class DataSourceManager {
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static final String JDBC_URL = "jdbc:mysql://localhost/tourism_app";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "toor";
+    private static final String PASSWORD = "";
     private JdbcTemplate jdbcTemplate;
 
     @PostConstruct

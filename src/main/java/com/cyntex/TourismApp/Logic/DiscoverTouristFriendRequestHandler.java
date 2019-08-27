@@ -18,6 +18,7 @@ import com.cyntex.TourismApp.Beans.RatingsProfileResponseBean;
 import com.cyntex.TourismApp.Beans.RegistrationRequestBean;
 import com.cyntex.TourismApp.Beans.UserRating;
 import com.cyntex.TourismApp.Persistance.FriendListDAO;
+import com.cyntex.TourismApp.Persistance.UserDAO;
 import com.cyntex.TourismApp.Persistance.UserProfileDAO;
 import com.cyntex.TourismApp.Persistance.UserRatingsProfileDAO;
 import com.cyntex.TourismApp.Util.UserRatingCalculator;
@@ -32,7 +33,7 @@ public class DiscoverTouristFriendRequestHandler {
 	private UserRatingsProfileDAO userRatingsProfileDAO;
 
 	@Autowired
-	private UserProfileDAO userProfileDAO;
+	private UserDAO userDAO;
 	
 	@Autowired
 	private FriendListDAO friendListDAO;
@@ -74,7 +75,7 @@ public class DiscoverTouristFriendRequestHandler {
 					if ( !isRecordAlreadyExists &&(!counterBucket.contains(usernameOfQuaryResponseBean))&& averageRating >= userRating.getRating() - 1
 							&& averageRating <= userRating.getRating() + 1) {
 						counterBucket.add(usernameOfQuaryResponseBean);
-						touristFriendProfileList.add(userProfileDAO
+						touristFriendProfileList.add(userDAO
 										.getUserRatingsProfile(usernameOfQuaryResponseBean));
 						if (touristFriendProfileList.size() >= 10) {
 							break;

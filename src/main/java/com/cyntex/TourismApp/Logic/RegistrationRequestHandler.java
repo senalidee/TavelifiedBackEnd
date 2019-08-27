@@ -20,36 +20,36 @@ public class RegistrationRequestHandler {
     public BaseResponse handle(RegistrationRequestBean requestBean){
         RegistrationResponseBean response = new RegistrationResponseBean();
         try{
-<<<<<<< HEAD
-            registrationDAO.addNewRecord(
-                    requestBean.getUsername(),
-=======
+//<<<<<<< HEAD
+//            registrationDAO.addNewRecord(
+//                    requestBean.getUsername(),
+//=======
             String imageID = UUID.randomUUID().toString();
             String pwdSalt = UUID.randomUUID().toString().substring(0, 8);
             String locationID = UUID.randomUUID().toString();
             FSManager.saveImage(imageID, requestBean.getImage());
             registrationDAO.addNewUser(
                     requestBean.getEmail(),
->>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
+//>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
                     requestBean.getFirstName(),
                     requestBean.getLastName(),
                     requestBean.getGender(),
                     requestBean.getCountry(),
-<<<<<<< HEAD
-                    requestBean.getContactNumber(),
-                    requestBean.getPwdSalt(),
-                    requestBean.getPassword(),
-                    requestBean.getPictureLink(),
-                    requestBean.getLocationId()
-                    );
-=======
+//<<<<<<< HEAD
+//                    requestBean.getContactNumber(),
+//                    requestBean.getPwdSalt(),
+//                    requestBean.getPassword(),
+//                    requestBean.getPictureLink(),
+//                    requestBean.getLocationId()
+//                    );
+//=======
                     requestBean.getPhone(),
                     imageID,
                     locationID,
                     pwdSalt,
                     PasswordEncrypter.getsha256Securepassword(requestBean.getPassword(), pwdSalt.getBytes())
             );
->>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
+//>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
             response.setStatus("SUCCESS");
             String id = UUID.randomUUID().toString();
             response.setId(id);

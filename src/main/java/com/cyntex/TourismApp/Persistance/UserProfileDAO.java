@@ -17,26 +17,7 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 
 @Component
 public class UserProfileDAO {
-	 private static final String ProfileFetchQuery
-     = "select * from user where username = ?";
-	 
-	 
-	    @Autowired
-	    private DataSourceManager dataSourceManager;
 
-	    @Transactional
-	    public DiscoverTouristFriendUserProfileQueryResponseBean getUserRatingsProfile(String username) {
-	    
-	    	DiscoverTouristFriendUserProfileQueryResponseBean queryData = dataSourceManager.getJdbcTemplate().query(
-	    			ProfileFetchQuery, new Object[]{username}, 
-	                (rs, rowNum) -> new DiscoverTouristFriendUserProfileQueryResponseBean(
-                    rs.getString("username"),rs.getString("first_name"),rs.getString("last_name"),rs.getString("contact_number"),
-                    rs.getString("country"),rs.getString("gender"),rs.getString("picture_link")
-                    )
-	                ).get(0);
-
-	        return queryData;
-	    }
 	    
 //		 public DiscoverTouristFriendUserProfileQueryResponseBean(String email, String firstName, String lastName, String phone,
 //		           String country, String gender, String imageID){
