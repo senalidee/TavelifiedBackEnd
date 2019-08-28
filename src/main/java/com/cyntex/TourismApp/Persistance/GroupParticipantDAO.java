@@ -55,7 +55,7 @@ public class GroupParticipantDAO {
                 new Object[] {username,chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) ->response= rs.getInt("counter"));
 		   
-	System.out.println("checkExistance "+response);        
+//	System.out.println("checkExistance "+response);        
 		if(response == 0){return false;} else{return true;}
 	}
 //		 int size=dataSourceManager.getJdbcTemplate().queryForList(checkExistance,

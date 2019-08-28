@@ -9,6 +9,7 @@ public class SendMessageRequestBean {
 	private String username;
 	private int groupId;
 	private String message;
+	private String firstname;
 //	private Date createdDate;// this will be suppled by us when message save
 	
 	
@@ -34,6 +35,12 @@ public class SendMessageRequestBean {
 	
 	public int getGroupId() {
 		return groupId;
+	}
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 	public String getUsername() {
 		return username;

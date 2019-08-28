@@ -17,8 +17,11 @@ import java.util.List;
 public class UserDAO {
 	  @Autowired
 	    private DataSourceManager dataSourceManager;
-
-
+	
+	 private int response;
+		
+	private static final String checkExistance=
+		    "select count(*) as counter from user where username = ? and first_name = ?";
 
     private static final String userRetrieveQuery = "select * from user where username = ?";
     
@@ -79,5 +82,15 @@ public class UserDAO {
  //   System.out.print(queryData.size());
        return queryData;
             
+    }
+    @Transactional
+    public boolean validate(String username,String firstname){
+    	
+		   dataSourceManager.getJdbcTemplate().query(checkExistance,
+	                new Object[] {username,firstname},
+	                new int[]{Types.VARCHAR,Types.VARCHAR},(rs,rawNo) ->response= rs.getInt("counter"));
+			   
+		System.out.println("checkExistance "+response);        
+			if(response == 0){return false;} else{return true;}
     }
 }

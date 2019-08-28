@@ -11,9 +11,9 @@ import com.cyntex.TourismApp.Beans.AddFriendToChatGroupRequestBean;
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.DeleteChatGroupMemberRequestBean;
 import com.cyntex.TourismApp.Logic.GroupParticipantRequestHandler;
+
+
 @Service 
-
-
 public class GroupParticipantService {
 	@Autowired
 	GroupParticipantRequestHandler addFriendRequestHandler;
