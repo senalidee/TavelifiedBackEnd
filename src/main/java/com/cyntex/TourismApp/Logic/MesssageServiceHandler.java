@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cyntex.TourismApp.Beans.*;
-import com.cyntex.TourismApp.Persistance.AddFriendToChatGroupDAO;
+import com.cyntex.TourismApp.Persistance.GroupParticipantDAO;
 import com.cyntex.TourismApp.Persistance.MessageDAO;
 
 
@@ -19,7 +19,7 @@ public class MesssageServiceHandler {
 	private MessageDAO messageDAO;
 	
 	@Autowired
-	private AddFriendToChatGroupDAO addFriendToChatGroupDAO;
+	private GroupParticipantDAO groupParticipantDAO;
 	
 	public BaseResponse handleSendMessage(SendMessageRequestBean requestBean){
 		
@@ -30,7 +30,7 @@ public class MesssageServiceHandler {
 	     int chatGroupId=requestBean.getGroupId();
 		 String message=requestBean.getMessage();
 	    
-		 if(addFriendToChatGroupDAO.checkExistance( chatGroupId, username)>0){
+		 if(groupParticipantDAO.checkExistance( chatGroupId, username)){
 		    messageDAO.saveMessage(chatGroupId,username,message);
 		 }else{
 			 responseBean.setStatus("FAILED: user is not in the group ");
@@ -40,7 +40,7 @@ public class MesssageServiceHandler {
 
 		 responseBean.setStatus("SUCCESS");
      } catch (Exception e) {
-    	 responseBean.setStatus("FAILED: error occured "+e.getMessage());
+    	 responseBean.setStatus("FAILED: error occured ");
 			
 	}
 		return responseBean;
@@ -57,7 +57,7 @@ public class MesssageServiceHandler {
 		
 		 responseBean.setStatus("SUCCESS");
 	     } catch (Exception e) {
-	    	 responseBean.setStatus("FAILED: error occured "+e.getMessage());
+	    	 responseBean.setStatus("FAILED: error occured ");
 				
 		}
 			return responseBean;

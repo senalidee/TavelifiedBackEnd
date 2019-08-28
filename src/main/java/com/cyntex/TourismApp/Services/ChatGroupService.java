@@ -14,7 +14,7 @@ public class ChatGroupService {
 	private ChatGroupRequestHandler chatGroupRequestHandler;
 	
 	public BaseResponse createChatGroup(CreateChatGroupRequestBean createChatGroupRequestBean){
-		return chatGroupRequestHandler.handle(createChatGroupRequestBean);
+		return chatGroupRequestHandler.createChatGroup(createChatGroupRequestBean);
 	}
    
 	

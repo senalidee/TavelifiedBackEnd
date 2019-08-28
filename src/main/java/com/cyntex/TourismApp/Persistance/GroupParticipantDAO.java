@@ -12,7 +12,7 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 
 
 @Component
-public class AddFriendToChatGroupDAO {
+public class GroupParticipantDAO {
 	
 	@Autowired
 	private DataSourceManager dataSourceManager;
@@ -20,7 +20,7 @@ public class AddFriendToChatGroupDAO {
 	private int response;
 	
 	private static final String checkExistance=
-	        "select participation_id from group_participant where username = ? and chat_group_id = ?";
+	        "select count(*) as counter from group_participant where username = ? and chat_group_id = ?";
 	private  static final String addFriendRequest=
 			"insert into group_participant(username,chat_group_id,added_by,avatar) values (?,?,?,?)";
 	
@@ -29,22 +29,42 @@ public class AddFriendToChatGroupDAO {
 	
 	private  static final String addGroupCreator=
 			"insert into group_participant(username,chat_group_id,is_admin,avatar) values (?,?,?,?)";
-	
-	
+		
 	private  static final String checkIsAdmin=
-			"select count(*) as counter from group_participant where ( added_by  = ? and chat_group_id = ?)";
+			"select count(*) as counter from group_participant where username  = ? and chat_group_id = ? and is_admin = '1'  ";
+	
+	private static final String makeAdmin=
+			"update group_participant set is_admin= '1' where username = ? and chat_group_id = ?";
+			
 	
 	
 	@Transactional
-	public int checkExistance(int chatGroupId, String username){
-
-		 int size=dataSourceManager.getJdbcTemplate().queryForList(checkExistance,
+	public void makeAdmin(int chatGroupId, String username){
+		
+		dataSourceManager.getJdbcTemplate().update(makeAdmin,
                 new Object[] {username,chatGroupId},
-                new int[]{Types.VARCHAR,Types.INTEGER}
-                ).size();
-
-		return size;
+                new int[]{Types.VARCHAR,Types.INTEGER});
+		
+		
+	}		
+		
+	@Transactional
+	public boolean checkExistance(int chatGroupId, String username){
+	
+		   dataSourceManager.getJdbcTemplate().query(checkExistance,
+                new Object[] {username,chatGroupId},
+                new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) ->response= rs.getInt("counter"));
+		   
+	System.out.println("checkExistance "+response);        
+		if(response == 0){return false;} else{return true;}
 	}
+//		 int size=dataSourceManager.getJdbcTemplate().queryForList(checkExistance,
+//                new Object[] {username,chatGroupId},
+//                new int[]{Types.VARCHAR,Types.INTEGER}
+//                ).size();
+
+//		return size;
+	
 	
 	@Transactional
 	public void addFriend(AddFriendToChatGroupRequestBean addFriendToChatGroupRequestBean){
@@ -55,9 +75,9 @@ public class AddFriendToChatGroupDAO {
 		
 		dataSourceManager.getJdbcTemplate().update(addFriendRequest,
                 new Object[] {username,chatGroupId,addedBy,avatar},
-                new int[]{Types.INTEGER,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR});
+                new int[]{Types.VARCHAR,Types.INTEGER,Types.VARCHAR,Types.VARCHAR});
                 
-		
+	//	(username,chat_group_id,added_by,avatar) values (?,?,?,?)
 	}
 	
 	@Transactional
@@ -81,12 +101,14 @@ public class AddFriendToChatGroupDAO {
 	}
 	
 	@Transactional
-	public boolean isAdmin(String addedby, int groupId){
+	public boolean isAdmin(String addedBy, int chatGroupId){
 		
-		dataSourceManager.getJdbcTemplate().query(checkIsAdmin,
-                new Object[] {addedby,groupId},
+	    dataSourceManager.getJdbcTemplate().query(checkIsAdmin,
+                new Object[] {addedBy,chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) -> response=rs.getInt("counter"));
-                
+              
+	    
+	    System.out.println("isAdmin "+response);  
 		if(response == 0){return false;} else{return true;}
 	}
 	

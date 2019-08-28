@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.CreateChatGroupRequestBean;
 import com.cyntex.TourismApp.Beans.DeleteChatGroupMemberRequestBean;
-import com.cyntex.TourismApp.Persistance.AddFriendToChatGroupDAO;
+import com.cyntex.TourismApp.Persistance.GroupParticipantDAO;
 import com.cyntex.TourismApp.Persistance.ChatGroupDAO;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
@@ -18,9 +18,9 @@ public class ChatGroupRequestHandler {
 	ChatGroupDAO chatGroupDAO;
 	
 	@Autowired
-	AddFriendToChatGroupDAO addFriendToChatGroup;
+	GroupParticipantDAO addFriendToChatGroup;
 	
-	public BaseResponse handle(CreateChatGroupRequestBean createChatGroupRequestBean){
+	public BaseResponse createChatGroup(CreateChatGroupRequestBean createChatGroupRequestBean){
 		BaseResponse baseResponse = new BaseResponse();
 		int chatGroupId=createChatGroupRequestBean.getChatGroupId();
 		String title=createChatGroupRequestBean.getGroupTitle();

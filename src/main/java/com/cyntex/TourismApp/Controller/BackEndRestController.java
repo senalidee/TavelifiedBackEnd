@@ -11,13 +11,13 @@ import com.cyntex.TourismApp.Logic.DiscoverTouristFriendRequestHandler;
 import com.cyntex.TourismApp.Logic.FoodRequestHandler;
 import com.cyntex.TourismApp.Logic.RatingProfileRequestHandler;
 import com.cyntex.TourismApp.Logic.TestRequestHandler;
-import com.cyntex.TourismApp.Services.AddFriendToChatGroupService;
+import com.cyntex.TourismApp.Services.GroupParticipantService;
 import com.cyntex.TourismApp.Services.AddtouristFriendService;
 import com.cyntex.TourismApp.Services.ChatGroupService;
 import com.cyntex.TourismApp.Services.DiscoverTouristAttractionService;
 import com.cyntex.TourismApp.Services.DiscoverTouristFriendService;
+import com.cyntex.TourismApp.Services.MakeAdminService;
 import com.cyntex.TourismApp.Services.MessageService;
-
 import com.cyntex.TourismApp.Util.JSONHandler;
 
 //=======
@@ -31,6 +31,7 @@ import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.AuthService;
 import com.cyntex.TourismApp.Util.FSManager;
 import com.cyntex.TourismApp.Util.JSONHandler;
+
 //>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -69,9 +70,12 @@ public class BackEndRestController {
     
     @Autowired
     private MessageService messageService;
+    
+    @Autowired
+    private MakeAdminService makeAdminService;
    
     @Autowired
-    private AddFriendToChatGroupService addFriendToChatGroupService;
+    private GroupParticipantService groupParticipantService;
     
     
     @RequestMapping(value="/serviceCheck",method= RequestMethod.GET)
@@ -222,7 +226,18 @@ public class BackEndRestController {
     @RequestMapping(value="/addFriendToChatGroup")
     public String addFriendToChatGroup(@RequestBody String data) throws Exception{
     	AddFriendToChatGroupRequestBean addFriendToChatGroup = JSONHandler.parseFromJSON(data, AddFriendToChatGroupRequestBean.class);
-    	BaseResponse response =addFriendToChatGroupService.addFriend(addFriendToChatGroup);
+    	BaseResponse response =groupParticipantService.addFriend(addFriendToChatGroup);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
+    }
+    
+
+    @CrossOrigin()
+    @RequestMapping(value="/makeAdmin")
+    public String makeAdmin(@RequestBody String data) throws Exception{
+    	MakeAdminRequestBean makeAdminRequestBean = JSONHandler.parseFromJSON(data, MakeAdminRequestBean.class);
+    	BaseResponse response =makeAdminService.makeAdmin(makeAdminRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     	
@@ -251,7 +266,7 @@ public class BackEndRestController {
     @RequestMapping(value="/deleteChatGroupMember" , method= RequestMethod.POST)
     public String deleteMember(@RequestBody String data) throws Exception{
     	DeleteChatGroupMemberRequestBean deleteChatGroupMemberRequestBean = JSONHandler.parseFromJSON(data, DeleteChatGroupMemberRequestBean.class);
-    	BaseResponse response= addFriendToChatGroupService.deleteMember(deleteChatGroupMemberRequestBean);
+    	BaseResponse response= groupParticipantService.deleteMember(deleteChatGroupMemberRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     }
