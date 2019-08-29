@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.web.firewall.FirewalledRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.AddFriendRequestBean;
 import com.cyntex.TourismApp.Beans.BaseResponse;
@@ -19,13 +20,21 @@ public class AddFriendRequestHandler {
 	FriendListDAO friendListDAO;
 	
 	public BaseResponse handle(AddFriendRequestBean addFriendRequestBean){
+		String username=addFriendRequestBean.getUserName();
+		String friendname=addFriendRequestBean.getFriendName();
 		
 		BaseResponse response =new BaseResponse();
 		try{
-			friendListDAO.addFriend(addFriendRequestBean.getUserName(), addFriendRequestBean.getFriendName());
-			
-			
+			if(!(StringUtils.isEmpty(username) || StringUtils.isEmpty(friendname))){
+			friendListDAO.addFriend(username, friendname);
 			response.setStatus("Success");
+			
+			}else{
+				response.setStatus("Check the payload again");
+			}
+			
+			
+			
 			
 		}catch(DataIntegrityViolationException  e){
 			response.setStatus("FAILED : "+"Friend is already added");

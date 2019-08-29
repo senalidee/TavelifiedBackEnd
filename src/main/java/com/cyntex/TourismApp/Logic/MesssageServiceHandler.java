@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.*;
 import com.cyntex.TourismApp.Persistance.GroupParticipantDAO;
@@ -34,16 +35,22 @@ public class MesssageServiceHandler {
 	     int chatGroupId=requestBean.getGroupId();
 		 String message=requestBean.getMessage();
 		 String firstname=requestBean.getFirstname();
-	    
-		 if(groupParticipantDAO.checkExistance( chatGroupId, username) && userDAO.validate(username,firstname)){
-		    messageDAO.saveMessage(chatGroupId,username,firstname,message);
-		 }else{
-			 responseBean.setStatus("FAILED: user is not in the group or username and firstname are not match");
-			 return responseBean;
-		 }
 		 
+		 if(!(StringUtils.isEmpty(username)||StringUtils.isEmpty(message)|| StringUtils.isEmpty(firstname) ||chatGroupId==0)){
+	    
+			 if(groupParticipantDAO.checkExistance( chatGroupId, username) && userDAO.validate(username,firstname)){
+			    messageDAO.saveMessage(chatGroupId,username,firstname,message);
+			 }else{
+				 responseBean.setStatus("FAILED: user is not in the group or username and firstname are not match");
+				 return responseBean;
+			 }
+			 
+			 responseBean.setStatus("SUCCESS");
+		 }else{
+			 responseBean.setStatus("Check the payload again");
+		 }
 
-		 responseBean.setStatus("SUCCESS");
+		
      } catch (Exception e) {
     	 responseBean.setStatus("FAILED: error occured "+e.getMessage());
 			

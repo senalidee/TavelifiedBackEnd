@@ -33,7 +33,7 @@ public class SearchFriendRequestHandler {
 			response.setSearchFriendQueryResponseBean(friendList);
 			
 		}else{
-			response.setStatus("FAIL : username is empty");
+			response.setStatus("Check the payload again");
 		}
 		}catch(Exception e ){
 			response.setStatus("FAIL : "+e.getMessage());

@@ -3,6 +3,7 @@ package com.cyntex.TourismApp.Logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.CreateChatGroupRequestBean;
@@ -28,6 +29,8 @@ public class ChatGroupRequestHandler {
 		String createdby=createChatGroupRequestBean.getCreatedBy();
 		String avatar=createChatGroupRequestBean.getAvatar();
 		try{
+			
+			if(!(StringUtils.isEmpty(title) || StringUtils.isEmpty(categoty)|| StringUtils.isEmpty(createdby)|| StringUtils.isEmpty(avatar) || chatGroupId ==0)){
 			chatGroupDAO.createChatGroup(
 					chatGroupId, 
 					title,
@@ -35,9 +38,13 @@ public class ChatGroupRequestHandler {
 					createdby);
 			
 			addFriendToChatGroup.addAdmin(chatGroupId ,createdby,avatar);
-			
-			
 			baseResponse.setStatus("SUCCESS");
+			}else{
+				baseResponse.setStatus("Check the payload again");
+				
+			}
+			
+			
 			
 		}catch(DataIntegrityViolationException  e){
 			baseResponse.setStatus("FAILED :  chat group id is duplicated");

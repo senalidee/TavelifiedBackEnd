@@ -4,6 +4,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.MakeAdminRequestBean;
@@ -25,15 +26,22 @@ public class MakeAdminRequestHandler {
 		String username=makeAdminRequestBean.getUsername();
 		String adminname=makeAdminRequestBean.getAdminname();
 		try{
-		if(groupParticipantDAO.isAdmin(adminname, chatGroupId) && groupParticipantDAO.checkExistance( chatGroupId, username)){
-			groupParticipantDAO.makeAdmin(chatGroupId, username);
 			
-			response.setStatus("making admin is successful");
+		 if(!(StringUtils.isEmpty(username)|| StringUtils.isEmpty(adminname) || chatGroupId==0)){
+			if(groupParticipantDAO.isAdmin(adminname, chatGroupId) && groupParticipantDAO.checkExistance( chatGroupId, username)){
+				groupParticipantDAO.makeAdmin(chatGroupId, username);
+				
+				response.setStatus("making admin is successful");
+				
+			}else{response.setStatus("you are not an admin or user is not in the group: making admin is unsuccessful");
 			
-		}else{response.setStatus("you are not an admin or user is not in the group: making admin is unsuccessful");
-		
-		}
-		  return response;
+			}
+			
+		 }else{
+			 response.setStatus("check the payload again");
+		 }
+			
+			  return response;
 		}catch(Exception e){
 			response.setStatus("making admin is unsuccessful");
 			 return response;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.DiscoverTouristFriendRatingDetailQueryResponseBean;
@@ -49,17 +50,14 @@ public class DiscoverTouristFriendRequestHandler {
 		
 		List<DiscoverTouristFriendUserProfileQueryResponseBean> touristFriendProfileList = new ArrayList<DiscoverTouristFriendUserProfileQueryResponseBean>();
 		String requesterUsername=discoverTouristFriendRequestBean.getUsername();
-
 		try {
-	
-
+	 
+			if(!StringUtils.isEmpty(requesterUsername)){
 			List<RatingsProfileQueryResponseBean> queryResponse = userRatingsProfileDAO
 					.getUserRatingsProfile(requesterUsername);
 
 			requestedUserRatingList = userRatingCalculator
 					.RatingProfileResponse(queryResponse).getUserRatings();
-//			System.out.println("userRatingList "
-//					+ requestedUserRatingList.size());
 			ProfileResponseBean = userRatingCalculator
 					.RatingProfileResponse(queryResponse);
 			ArrayList<String> counterBucket = new ArrayList<String>();
@@ -70,7 +68,6 @@ public class DiscoverTouristFriendRequestHandler {
 				for (DiscoverTouristFriendRatingDetailQueryResponseBean discoverTouristFriendRatingDetailQueryResponseBean : discoverTouristFriendQuaryResponseBeanList) {
 					double averageRating = discoverTouristFriendRatingDetailQueryResponseBean.getAverageRating();
 					String usernameOfQuaryResponseBean=discoverTouristFriendRatingDetailQueryResponseBean.getUsername();
-	//				System.out.println("averageRating " + averageRating);
 					boolean isRecordAlreadyExists=friendListDAO.isRecordAlreadyExists(requesterUsername, usernameOfQuaryResponseBean);
 					if ( !isRecordAlreadyExists &&(!counterBucket.contains(usernameOfQuaryResponseBean))&& averageRating >= userRating.getRating() - 1
 							&& averageRating <= userRating.getRating() + 1) {
@@ -85,16 +82,22 @@ public class DiscoverTouristFriendRequestHandler {
 				}
 
 			}
+			responseBean.setUserProfiles(touristFriendProfileList);
+			}else{
+				 responseBean.setStatus("Check the payload Again");
+				
+			}
+				
 			
 			 responseBean.setStatus("SUCCESS");
 		} catch (Exception e) {
 		    responseBean.setStatus("FAIL : "+e.getMessage());
 			
 		}
-		responseBean.setUserProfiles(touristFriendProfileList);
+		
 		return responseBean;
 
 	
-	}
+     }
 
 }

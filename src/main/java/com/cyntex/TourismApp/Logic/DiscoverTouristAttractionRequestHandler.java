@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionPlaceQueryResponseBean;
@@ -34,9 +35,10 @@ public class DiscoverTouristAttractionRequestHandler {
 		DiscoverTouristAttractionPlaceResponseBean responseBean= new DiscoverTouristAttractionPlaceResponseBean();
 		try{
 			List<DiscoverTouristAttractionQueryResponseBean> discoverTouristAttractionQuaryResponseBeanList =touristAttractionDAO.getUserRatingsProfile();
+			
 			double currentLongitude=discoverTouristAttractionRequestBean.getLongitude();
 			double currentLatitude=discoverTouristAttractionRequestBean.getLatitude();
-			
+			if(!(StringUtils.isEmpty(currentLongitude) || StringUtils.isEmpty(currentLatitude))){
 			for(DiscoverTouristAttractionQueryResponseBean discoverTouristAttractionQueryResponseBean:discoverTouristAttractionQuaryResponseBeanList){
 				double longitude =discoverTouristAttractionQueryResponseBean.getLongitude();
 				double latitude =discoverTouristAttractionQueryResponseBean.getLatitude();
@@ -46,6 +48,12 @@ public class DiscoverTouristAttractionRequestHandler {
 					discoverTouristAttractionResponseBeanList.add(discoverTouristAttractionPlaceQueryResponseBean);
 				}if(discoverTouristAttractionResponseBeanList.size()>=10){break;}
 			}
+			responseBean.setStatus("SUCCESS");
+			
+			responseBean.setDiscoverTouristAttractionPlaceQueryResponseBean(discoverTouristAttractionResponseBeanList);
+			}else{
+				responseBean.setStatus("Check the payload");	
+			}
 		
 			responseBean.setStatus("SUCCESS");
 		}catch(Exception e){
@@ -54,7 +62,7 @@ public class DiscoverTouristAttractionRequestHandler {
 	
 			
 		}
-		responseBean.setDiscoverTouristAttractionPlaceQueryResponseBean(discoverTouristAttractionResponseBeanList);
+		
 		return responseBean;
 	}
 	public boolean isAttractivePlace(double lat1,double long1,double lat2,double long2){

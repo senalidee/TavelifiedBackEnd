@@ -90,7 +90,7 @@ public class UserDAO {
 	                new Object[] {username,firstname},
 	                new int[]{Types.VARCHAR,Types.VARCHAR},(rs,rawNo) ->response= rs.getInt("counter"));
 			   
-		System.out.println("checkExistance "+response);        
+//		System.out.println("checkExistance "+response);        
 			if(response == 0){return false;} else{return true;}
     }
 }
