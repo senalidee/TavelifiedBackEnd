@@ -18,6 +18,7 @@ import com.cyntex.TourismApp.Services.DiscoverTouristAttractionService;
 import com.cyntex.TourismApp.Services.DiscoverTouristFriendService;
 import com.cyntex.TourismApp.Services.MakeAdminService;
 import com.cyntex.TourismApp.Services.MessageService;
+import com.cyntex.TourismApp.Services.TouristService;
 import com.cyntex.TourismApp.Util.JSONHandler;
 
 //=======
@@ -31,6 +32,7 @@ import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.AuthService;
 import com.cyntex.TourismApp.Util.FSManager;
 import com.cyntex.TourismApp.Util.JSONHandler;
+
 
 //>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,6 @@ public class BackEndRestController {
 
     @Autowired
     private TestRequestHandler testRequestHandler;
-///<<<<<<< HEAD
     
     @Autowired
     private DiscoverTouristFriendService discoverTouristFriendService;
@@ -77,14 +78,13 @@ public class BackEndRestController {
     @Autowired
     private GroupParticipantService groupParticipantService;
     
+    @Autowired
+    private TouristService touristService;
     
     @RequestMapping(value="/serviceCheck",method= RequestMethod.GET)
     public String serviceCheck() throws Exception{
     	return JSONHandler.parseToJSON("Service is ok");
     }
-//=======
-//>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
-
 
     @CrossOrigin()
     @RequestMapping(value="/register",method= RequestMethod.POST)
@@ -280,6 +280,14 @@ public class BackEndRestController {
     	
     }
     
+    @CrossOrigin()
+    @RequestMapping(value="/addTouristService" , method= RequestMethod.POST)
+    public String addTouristFriend(@RequestBody String data) throws Exception{
+    	AddTouristServiceRequestBean addTouristServiceRequestBean = JSONHandler.parseFromJSON(data, AddTouristServiceRequestBean.class);
+    	BaseResponse response= touristService.addTouristService(addTouristServiceRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }  
     
 
 

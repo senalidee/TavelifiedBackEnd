@@ -33,10 +33,10 @@ public class SearchFriendRequestHandler {
 			response.setSearchFriendQueryResponseBean(friendList);
 			
 		}else{
-			response.setStatus("Check the payload again");
+			response.setStatus("FAILED: Check the payload again");
 		}
 		}catch(Exception e ){
-			response.setStatus("FAIL : "+e.getMessage());
+			response.setStatus("FAILED: "+e.getMessage());
 			
 		}
 		return response;

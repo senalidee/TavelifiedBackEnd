@@ -30,7 +30,7 @@ public class AddFriendRequestHandler {
 			response.setStatus("Success");
 			
 			}else{
-				response.setStatus("Check the payload again");
+				response.setStatus("FAILED: Check the payload again");
 			}
 			
 			

@@ -84,14 +84,14 @@ public class DiscoverTouristFriendRequestHandler {
 			}
 			responseBean.setUserProfiles(touristFriendProfileList);
 			}else{
-				 responseBean.setStatus("Check the payload Again");
+				 responseBean.setStatus("FAILED:Check the payload Again");
 				
 			}
 				
 			
 			 responseBean.setStatus("SUCCESS");
 		} catch (Exception e) {
-		    responseBean.setStatus("FAIL : "+e.getMessage());
+		    responseBean.setStatus("FAILED: "+e.getMessage());
 			
 		}
 		

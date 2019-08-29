@@ -38,6 +38,7 @@ public class DiscoverTouristAttractionRequestHandler {
 			
 			double currentLongitude=discoverTouristAttractionRequestBean.getLongitude();
 			double currentLatitude=discoverTouristAttractionRequestBean.getLatitude();
+			
 			if(!(StringUtils.isEmpty(currentLongitude) || StringUtils.isEmpty(currentLatitude))){
 			for(DiscoverTouristAttractionQueryResponseBean discoverTouristAttractionQueryResponseBean:discoverTouristAttractionQuaryResponseBeanList){
 				double longitude =discoverTouristAttractionQueryResponseBean.getLongitude();
@@ -52,12 +53,12 @@ public class DiscoverTouristAttractionRequestHandler {
 			
 			responseBean.setDiscoverTouristAttractionPlaceQueryResponseBean(discoverTouristAttractionResponseBeanList);
 			}else{
-				responseBean.setStatus("Check the payload");	
+				responseBean.setStatus("FAILED: Check the payload");	
 			}
 		
 			responseBean.setStatus("SUCCESS");
 		}catch(Exception e){
-			responseBean.setStatus("FAIL "+e.getMessage());
+			responseBean.setStatus("FAILED: "+e.getMessage());
 			
 	
 			

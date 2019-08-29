@@ -33,17 +33,17 @@ public class MakeAdminRequestHandler {
 				
 				response.setStatus("making admin is successful");
 				
-			}else{response.setStatus("you are not an admin or user is not in the group: making admin is unsuccessful");
+			}else{response.setStatus("FAILED: you are not an admin or user is not in the group: making admin is unsuccessful");
 			
 			}
 			
 		 }else{
-			 response.setStatus("check the payload again");
+			 response.setStatus("FAILED: check the payload again");
 		 }
 			
 			  return response;
 		}catch(Exception e){
-			response.setStatus("making admin is unsuccessful");
+			response.setStatus("FAILED: making admin is unsuccessful");
 			 return response;
 		}
 		

@@ -40,7 +40,7 @@ public class ChatGroupRequestHandler {
 			addFriendToChatGroup.addAdmin(chatGroupId ,createdby,avatar);
 			baseResponse.setStatus("SUCCESS");
 			}else{
-				baseResponse.setStatus("Check the payload again");
+				baseResponse.setStatus("FAILED: Check the payload again");
 				
 			}
 			

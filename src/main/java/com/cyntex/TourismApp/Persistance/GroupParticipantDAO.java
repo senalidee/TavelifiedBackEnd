@@ -66,12 +66,18 @@ public class GroupParticipantDAO {
 //		return size;
 	
 	
+
+//	public void addFriend(AddFriendToChatGroupRequestBean addFriendToChatGroupRequestBean){
+//		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
+//		String username=addFriendToChatGroupRequestBean.getUsername();
+//		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
+//		String avatar=addFriendToChatGroupRequestBean.getAvatar();
 	@Transactional
-	public void addFriend(AddFriendToChatGroupRequestBean addFriendToChatGroupRequestBean){
-		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
-		String username=addFriendToChatGroupRequestBean.getUsername();
-		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
-		String avatar=addFriendToChatGroupRequestBean.getAvatar();
+	public void addFriend(String username,int chatGroupId,String addedBy,String avatar){
+//		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
+//		String username=addFriendToChatGroupRequestBean.getUsername();
+//		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
+//		String avatar=addFriendToChatGroupRequestBean.getAvatar();
 		
 		dataSourceManager.getJdbcTemplate().update(addFriendRequest,
                 new Object[] {username,chatGroupId,addedBy,avatar},

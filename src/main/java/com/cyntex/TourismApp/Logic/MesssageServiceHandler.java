@@ -47,7 +47,7 @@ public class MesssageServiceHandler {
 			 
 			 responseBean.setStatus("SUCCESS");
 		 }else{
-			 responseBean.setStatus("Check the payload again");
+			 responseBean.setStatus("FAILED: Check the payload again");
 		 }
 
 		

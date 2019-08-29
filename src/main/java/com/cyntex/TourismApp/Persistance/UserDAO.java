@@ -19,13 +19,18 @@ public class UserDAO {
 	    private DataSourceManager dataSourceManager;
 	
 	 private int response;
+	 
+	private static final String checkIsAdmin=
+			"select count(*) as counter from user where username = ? and is_admin = '1' ";
 		
 	private static final String checkExistance=
 		    "select count(*) as counter from user where username = ? and first_name = ?";
 
-    private static final String userRetrieveQuery = "select * from user where username = ?";
+    private static final String userRetrieveQuery = 
+    		"select * from user where username = ?";
     
-    private static final String userRetreveRequestQuery= "select * from user where first_name like ?";
+    private static final String userRetreveRequestQuery= 
+    		"select * from user where first_name like ?";
     
    
     
@@ -93,4 +98,16 @@ public class UserDAO {
 //		System.out.println("checkExistance "+response);        
 			if(response == 0){return false;} else{return true;}
     }
+    
+	@Transactional
+	public boolean isAdmin(String addedBy){
+		
+	    dataSourceManager.getJdbcTemplate().query(checkIsAdmin,
+                new Object[] {addedBy},
+                new int[]{Types.VARCHAR},(rs,rawNo) -> response=rs.getInt("counter"));
+              
+	    
+	    System.out.println("isAdmin "+response);  
+		if(response == 0){return false;} else{return true;}
+	}
 }
