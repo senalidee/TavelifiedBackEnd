@@ -282,13 +282,30 @@ public class BackEndRestController {
     
     @CrossOrigin()
     @RequestMapping(value="/addTouristService" , method= RequestMethod.POST)
-    public String addTouristFriend(@RequestBody String data) throws Exception{
+    public String addTouristService(@RequestBody String data) throws Exception{
     	AddTouristServiceRequestBean addTouristServiceRequestBean = JSONHandler.parseFromJSON(data, AddTouristServiceRequestBean.class);
     	BaseResponse response= touristService.addTouristService(addTouristServiceRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     }  
     
+//    @CrossOrigin()
+//    @RequestMapping(value="/addServiceProvider" , method= RequestMethod.POST)
+//    public String addTouristService(@RequestBody String data) throws Exception{
+//    	AddTouristServiceRequestBean addTouristServiceRequestBean = JSONHandler.parseFromJSON(data, AddTouristServiceRequestBean.class);
+//    	BaseResponse response= touristService.addTouristService(addTouristServiceRequestBean);
+//    	return JSONHandler.parseToJSON(response);
+//    	
+//    } 
+    
+    @CrossOrigin()
+    @RequestMapping(value="/addServiceProvider" , method= RequestMethod.POST)
+    public String addServiceProvider(@RequestBody String data) throws Exception{
+    	AddServiceProviderRequestBean addServiceProviderRequestBean = JSONHandler.parseFromJSON(data, AddServiceProviderRequestBean.class);
+    	BaseResponse response= touristService.addServiceProvider(addServiceProviderRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
 
 
 }
