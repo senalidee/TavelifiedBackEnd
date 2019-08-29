@@ -306,6 +306,23 @@ public class BackEndRestController {
     	return JSONHandler.parseToJSON(response);
     	
     }
+    @CrossOrigin()
+    @RequestMapping(value="/contactTouristGuideSendMessage" , method= RequestMethod.POST)
+    public String ContactTouristGuideSendMessage(@RequestBody String data) throws Exception{
+    	ContactTouristGuideSendMessageRequestBean contactTouristGuideSendMessageRequestBean = JSONHandler.parseFromJSON(data, ContactTouristGuideSendMessageRequestBean.class);
+    	BaseResponse response= messageService.sendMessageToTouristGuide(contactTouristGuideSendMessageRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
 
+    
+    @CrossOrigin()
+    @RequestMapping(value="/contactTouristGuideGetMessage" , method= RequestMethod.POST)
+    public String ContactTouristGuideGetMessage(@RequestBody String data) throws Exception{
+    	ContactTouristGuideGetMessageRequestBean contactTouristGuideGetMessageRequestBean = JSONHandler.parseFromJSON(data, ContactTouristGuideGetMessageRequestBean.class);
+    	BaseResponse response= messageService.getMessageFromTouristGuide(contactTouristGuideGetMessageRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
 
 }
