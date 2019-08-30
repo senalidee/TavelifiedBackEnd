@@ -14,6 +14,7 @@ import com.cyntex.TourismApp.Beans.ChatUserBean;
 import com.cyntex.TourismApp.Beans.SendMessageQueryResponsBean;
 import com.cyntex.TourismApp.Beans.ShopDetailsQueryResultBean;
 import com.cyntex.TourismApp.Util.DataSourceManager;
+import com.cyntex.TourismApp.Util.FSManager;
 
 
 @Component
@@ -25,7 +26,7 @@ public class MessageDAO {
 	private static final String saveMessageQuery=
 			"insert into message_details(chat_group_id,username,first_name, message ,created_date) values (?,?,?,?,?)";
 	private static final String getMessageDetailsQuery =
-			"select * from message_details as one left join group_participant as two on (one.username = two.username and one.chat_group_id = two.chat_group_id ) where one.chat_group_id = ?  order by one.created_date ";
+			"select * from message_details as one left join group_participant as two on ( one.username = two.username and one.chat_group_id = two.chat_group_id )left join user as three on two.username=three.username  where one.chat_group_id = ?  order by one.created_date ";
 	
 	
 //	messageDAO.saveMessage(chatGroupId,username,message);
@@ -52,7 +53,7 @@ public class MessageDAO {
                         rs.getInt("message_id"),
                          rs.getString("message"),
                         rs.getDate("created_date"),
-                        new ChatUserBean(rs.getString("username"),rs.getString("first_name"),rs.getString("avatar")))
+                        new ChatUserBean(rs.getString("username"),rs.getString("first_name"),FSManager.retrieveImage(rs.getString("picture_link"))))
         );
         
 		return queryData;

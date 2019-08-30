@@ -36,7 +36,7 @@ public class MesssageServiceHandler {
 		 String message=requestBean.getMessage();
 		 String firstname=requestBean.getFirstname();
 		 
-		 if(!(StringUtils.isEmpty(username)||StringUtils.isEmpty(message)|| StringUtils.isEmpty(firstname) ||chatGroupId==0)){
+		 if(!(StringUtils.isEmpty(username)|| StringUtils.isEmpty(firstname) ||chatGroupId==0)){
 	    
 			 if(groupParticipantDAO.checkExistance( chatGroupId, username) && userDAO.validate(username,firstname)){
 			    messageDAO.saveMessage(chatGroupId,username,firstname,message);
@@ -69,7 +69,7 @@ public class MesssageServiceHandler {
 		
 		 responseBean.setStatus("SUCCESS");
 	     } catch (Exception e) {
-	    	 responseBean.setStatus("FAILED: error occured ");
+	    	 responseBean.setStatus("FAILED: error occured "+e.getMessage());
 				
 		}
 			return responseBean;

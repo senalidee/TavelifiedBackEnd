@@ -12,14 +12,9 @@ public class CreateChatGroupRequestBean {
 	private String groupTitle;
 	private String category;
 	private String createdBy;
-	private String avatar;
+
 	
-	public String getAvatar() {
-		return avatar;
-	}
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
+
 	//private Date createdDate;
 	public int getChatGroupId() {
 		return chatGroupId;

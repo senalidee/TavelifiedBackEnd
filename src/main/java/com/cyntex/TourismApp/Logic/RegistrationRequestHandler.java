@@ -19,7 +19,7 @@ public class RegistrationRequestHandler {
 
     public BaseResponse handle(RegistrationRequestBean requestBean){
         RegistrationResponseBean response = new RegistrationResponseBean();
-        try{
+        try{ 
             String imageID = UUID.randomUUID().toString();
             String pwdSalt = UUID.randomUUID().toString().substring(0, 8);
             String locationID = UUID.randomUUID().toString();

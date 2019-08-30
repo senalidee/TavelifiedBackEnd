@@ -27,17 +27,17 @@ public class ChatGroupRequestHandler {
 		String title=createChatGroupRequestBean.getGroupTitle();
 		String categoty= createChatGroupRequestBean.getCategory();
 		String createdby=createChatGroupRequestBean.getCreatedBy();
-		String avatar=createChatGroupRequestBean.getAvatar();
+		
 		try{
 			
-			if(!(StringUtils.isEmpty(title) || StringUtils.isEmpty(categoty)|| StringUtils.isEmpty(createdby)|| StringUtils.isEmpty(avatar) || chatGroupId ==0)){
+			if(!(StringUtils.isEmpty(title) || StringUtils.isEmpty(categoty)|| StringUtils.isEmpty(createdby) || chatGroupId ==0)){
 			chatGroupDAO.createChatGroup(
 					chatGroupId, 
 					title,
 					categoty,
 					createdby);
 			
-			addFriendToChatGroup.addAdmin(chatGroupId ,createdby,avatar);
+			addFriendToChatGroup.addAdmin(chatGroupId ,createdby);
 			baseResponse.setStatus("SUCCESS");
 			}else{
 				baseResponse.setStatus("FAILED: Check the payload again");

@@ -22,13 +22,13 @@ public class GroupParticipantDAO {
 	private static final String checkExistance=
 	        "select count(*) as counter from group_participant where username = ? and chat_group_id = ?";
 	private  static final String addFriendRequest=
-			"insert into group_participant(username,chat_group_id,added_by,avatar) values (?,?,?,?)";
+			"insert into group_participant(username,chat_group_id,added_by) values (?,?,?)";
 	
 	private  static final String deleteFriendRequest=
 			"delete from group_participant where  username = ? and chat_group_id = ?";
 	
 	private  static final String addGroupCreator=
-			"insert into group_participant(username,chat_group_id,is_admin,avatar) values (?,?,?,?)";
+			"insert into group_participant(username,chat_group_id,is_admin) values (?,?,?)";
 		
 	private  static final String checkIsAdmin=
 			"select count(*) as counter from group_participant where username  = ? and chat_group_id = ? and is_admin = '1'  ";
@@ -73,25 +73,25 @@ public class GroupParticipantDAO {
 //		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
 //		String avatar=addFriendToChatGroupRequestBean.getAvatar();
 	@Transactional
-	public void addFriend(String username,int chatGroupId,String addedBy,String avatar){
+	public void addFriend(String username,int chatGroupId,String addedBy){
 //		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
 //		String username=addFriendToChatGroupRequestBean.getUsername();
 //		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
 //		String avatar=addFriendToChatGroupRequestBean.getAvatar();
 		
 		dataSourceManager.getJdbcTemplate().update(addFriendRequest,
-                new Object[] {username,chatGroupId,addedBy,avatar},
-                new int[]{Types.VARCHAR,Types.INTEGER,Types.VARCHAR,Types.VARCHAR});
+                new Object[] {username,chatGroupId,addedBy},
+                new int[]{Types.VARCHAR,Types.INTEGER,Types.VARCHAR});
                 
 	//	(username,chat_group_id,added_by,avatar) values (?,?,?,?)
 	}
 	
 	@Transactional
-	public void addAdmin(int chatGroupId,String username,String avatar){
+	public void addAdmin(int chatGroupId,String username){
 		
 		dataSourceManager.getJdbcTemplate().update(addGroupCreator,
-                new Object[] {username,chatGroupId,1, avatar},
-                new int[]{Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR});
+                new Object[] {username,chatGroupId,1},
+                new int[]{Types.INTEGER,Types.INTEGER,Types.INTEGER});
                 
 		
 	}

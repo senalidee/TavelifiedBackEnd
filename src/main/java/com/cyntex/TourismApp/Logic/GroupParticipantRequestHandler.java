@@ -26,11 +26,11 @@ public class GroupParticipantRequestHandler {
     	String username=addFriendRequestBean.getUsername();
     	int  chatGroupId=addFriendRequestBean.getChatGroupId();
     	String addedBy=addFriendRequestBean.getAddedBy();
-    	String avatar=addFriendRequestBean.getAvatar();
+    
 		try{
-			if(!(StringUtils.isEmpty(username)|| StringUtils.isEmpty(addedBy) || StringUtils.isEmpty(avatar) || chatGroupId==0)){
+			if(!(StringUtils.isEmpty(username)|| StringUtils.isEmpty(addedBy) || chatGroupId==0)){
 				 if(groupParticipantDAO.isAdmin(addedBy,chatGroupId) && !groupParticipantDAO.checkExistance( chatGroupId, username)){
-					 groupParticipantDAO.addFriend(username,chatGroupId,addedBy,avatar);
+					 groupParticipantDAO.addFriend(username,chatGroupId,addedBy);
 					 responseBean.setStatus("SUCCESS ");
 			     }else{
 					 responseBean.setStatus("FAILED: you are not a admin or friend is already a member of the group");
@@ -44,7 +44,7 @@ public class GroupParticipantRequestHandler {
 			responseBean.setStatus("FAILED: duplicate entry  ");
 			
 		}catch(Exception e ){
-			responseBean.setStatus("FAILED: user cannot be added  " );
+			responseBean.setStatus("FAILED: user cannot be added  " +e.getMessage());
 		}
 		 return responseBean;
     }

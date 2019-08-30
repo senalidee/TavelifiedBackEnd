@@ -4,6 +4,9 @@ public class ContactTouristGuideGetMessageRequestBean {
 	
 	private int serviceId;
 	private String username;
+	
+	
+	
 	public int getServiceId() {
 		return serviceId;
 	}

@@ -310,7 +310,7 @@ public class BackEndRestController {
     @RequestMapping(value="/contactTouristGuideSendMessage" , method= RequestMethod.POST)
     public String ContactTouristGuideSendMessage(@RequestBody String data) throws Exception{
     	ContactTouristGuideSendMessageRequestBean contactTouristGuideSendMessageRequestBean = JSONHandler.parseFromJSON(data, ContactTouristGuideSendMessageRequestBean.class);
-    	BaseResponse response= messageService.sendMessageToTouristGuide(contactTouristGuideSendMessageRequestBean);
+    	BaseResponse response=  messageService.sendMessageToTouristGuide(contactTouristGuideSendMessageRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     }

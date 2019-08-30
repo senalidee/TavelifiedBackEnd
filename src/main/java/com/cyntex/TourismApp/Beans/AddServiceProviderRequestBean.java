@@ -7,6 +7,7 @@ public class AddServiceProviderRequestBean {
 	private int serviceId;
 	
 	
+	
 	public String getAddedBy() {
 		return addedBy;
 	}
