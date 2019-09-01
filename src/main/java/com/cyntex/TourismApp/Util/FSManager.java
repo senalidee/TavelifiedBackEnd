@@ -12,6 +12,7 @@ public class FSManager {
 
     public static void saveImage(String imageID, String base64String) {
         try {
+  
             File file = new File(imageID);
             if (!file.exists()) {
                 file.createNewFile();

@@ -15,8 +15,8 @@ import java.util.List;
 
 @Component
 public class UserDAO {
-	  @Autowired
-	    private DataSourceManager dataSourceManager;
+	@Autowired
+	private DataSourceManager dataSourceManager;
 	
 	 private int response;
 	 

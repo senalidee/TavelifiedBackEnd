@@ -292,7 +292,23 @@ public class BackEndRestController {
     	BaseResponse response= touristService.addTouristService(addTouristServiceRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
-    }  
+    } 
+    
+    @CrossOrigin()
+    @RequestMapping(value="/getTouristService/{serviceTitle}" , method= RequestMethod.GET)
+    public String getService(@PathVariable("serviceTitle") String data) throws Exception{
+    	BaseResponse response= touristService.getTouristServicesByTitle(data);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/getAllTouristService" , method= RequestMethod.GET)
+    public String getAllServices() throws Exception{
+    	BaseResponse response= touristService.getAllTouristServices();
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
     
 //    @CrossOrigin()
 //    @RequestMapping(value="/addServiceProvider" , method= RequestMethod.POST)
@@ -338,5 +354,7 @@ public class BackEndRestController {
     	return JSONHandler.parseToJSON(response);
     	
     }
+    
+
 
 }

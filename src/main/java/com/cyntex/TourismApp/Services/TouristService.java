@@ -27,4 +27,14 @@ public class TouristService {
 		return touristServiceProvideHandler.addServiceProvider(addServiceProviderRequestBean);
 		
 	}
+	
+	public BaseResponse getTouristServicesByTitle(String title){
+		
+		return touristServiceHandler.getTouristServiceByTitle(title);
+	}
+	
+	public BaseResponse getAllTouristServices(){
+		
+		return touristServiceHandler.getAllTouristServices();
+	}
 }

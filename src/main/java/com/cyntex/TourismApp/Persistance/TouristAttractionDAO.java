@@ -24,7 +24,7 @@ public class TouristAttractionDAO {
 
     	List<DiscoverTouristAttractionQueryResponseBean> queryData = dataSourceManager.getJdbcTemplate().query(
     			locationDetailFetcQuery, 
-                (rs, rowNum) -> new DiscoverTouristAttractionQueryResponseBean(rs.getString("location_id"),rs.getDouble("lng"),rs.getDouble("lat")));
+                (rs, rowNum) -> new DiscoverTouristAttractionQueryResponseBean( rs.getString("location_id"),rs.getDouble("lng"),rs.getDouble("lat")));
 	
     	return queryData;
     }

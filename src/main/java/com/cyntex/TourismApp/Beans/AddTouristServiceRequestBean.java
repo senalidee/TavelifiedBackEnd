@@ -9,10 +9,30 @@ public class AddTouristServiceRequestBean {
 	private String serviceDescription;	
 	private String ownername;	
 	private String locationId;	
-	private String titlePhotoUrl;	
-	private String photoCollectionId;	
+	private String titlePhoto;	
+	//private String photoCollectionId;	
 	private String ratingProfileId;
+	private String[] photoCollection;
 	
+	
+	
+	
+	
+
+	
+	
+	public String[] getPhotoCollection() {
+		return photoCollection;
+	}
+	public void setPhotoCollection(String[] photoCollection) {
+		this.photoCollection = photoCollection;
+	}
+	public String getTitlePhoto() {
+		return titlePhoto;
+	}
+	public void setTitlePhoto(String titlePhoto) {
+		this.titlePhoto = titlePhoto;
+	}
 	public String getAddedBy() {
 		return addedBy;
 	}
@@ -43,18 +63,13 @@ public class AddTouristServiceRequestBean {
 	public void setLocationId(String locationId) {
 		this.locationId = locationId;
 	}
-	public String getTitlePhotoUrl() {
-		return titlePhotoUrl;
-	}
-	public void setTitlePhotoUrl(String titlePhotoUrl) {
-		this.titlePhotoUrl = titlePhotoUrl;
-	}
-	public String getPhotoCollectionId() {
-		return photoCollectionId;
-	}
-	public void setPhotoCollectionId(String photoCollectionId) {
-		this.photoCollectionId = photoCollectionId;
-	}
+
+//	public String getPhotoCollectionId() {
+//		return photoCollectionId;
+//	}
+//	public void setPhotoCollectionId(String photoCollectionId) {
+//		this.photoCollectionId = photoCollectionId;
+//	}
 	public String getRatingProfileId() {
 		return ratingProfileId;
 	}
