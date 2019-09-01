@@ -9,7 +9,7 @@ import com.cyntex.TourismApp.Logic.DiscoverTouristFriendRequestHandler;
 import com.cyntex.TourismApp.Logic.SearchFriendRequestHandler;
 
 @Service
-public class DiscoverTouristFriendService {
+public class TouristFriendService {
 	@Autowired
 	private DiscoverTouristFriendRequestHandler discoverTouristFriendRequestHandler;
 	
@@ -24,6 +24,7 @@ public class DiscoverTouristFriendService {
 	public BaseResponse searchFriend(String fullname){
 		return searchFriendRequestHandler.handle(fullname);
 		
-	} 
+	}
+	
 
 }

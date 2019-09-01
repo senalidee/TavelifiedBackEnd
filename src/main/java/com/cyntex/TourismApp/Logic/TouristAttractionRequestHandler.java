@@ -3,38 +3,94 @@ package com.cyntex.TourismApp.Logic;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.cyntex.TourismApp.Beans.AddTouristAttractionRequestBean;
+import com.cyntex.TourismApp.Beans.AddTouristAttractionResponseBean;
+import com.cyntex.TourismApp.Beans.AddTouristServiceResponseBean;
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionPlaceQueryResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionPlaceResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionQueryResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionRequestBean;
+import com.cyntex.TourismApp.Persistance.LocationDetailsDAO;
 import com.cyntex.TourismApp.Persistance.TouristAttractionDAO;
-import com.cyntex.TourismApp.Persistance.TouristAttractionPlaceDAO;
+import com.cyntex.TourismApp.Persistance.TouristAttractionPhotoCollectionDAO;
+
+import com.cyntex.TourismApp.Util.FSManager;
 import com.fasterxml.jackson.databind.deser.Deserializers.Base;
 
 
 @Component
-public class DiscoverTouristAttractionRequestHandler {
+public class TouristAttractionRequestHandler {
 	@Autowired
-	TouristAttractionDAO  touristAttractionDAO;
+	LocationDetailsDAO  locationDetailsDAO;
 	
 	@Autowired
-	TouristAttractionPlaceDAO touristAttractionPlaceDAO;
+	TouristAttractionDAO touristAttractionDAO;
+	
+	@Autowired
+	TouristAttractionPhotoCollectionDAO touristAttractionPhotoCollectionDAO;
 	
 	
+    public BaseResponse addTouristAttraction(AddTouristAttractionRequestBean addTouristAttractionRequestBean){
+    	String attractionName=addTouristAttractionRequestBean.getAttractionName();
+    	String description=addTouristAttractionRequestBean.getDescription();
+    	String ratingProfileId=addTouristAttractionRequestBean.getRatingProfileId();
+    	String locationId=addTouristAttractionRequestBean.getLocationId();
+    	String titlePhoto=addTouristAttractionRequestBean.getTitlePhotoUrl();
+    	String[] photoCollection=addTouristAttractionRequestBean.getPhotoCollection();
+    	
+    	
+		AddTouristAttractionResponseBean response = new AddTouristAttractionResponseBean();
+		try{
+				
+				if(!(StringUtils.isEmpty(attractionName)||StringUtils.isEmpty(description)||StringUtils.isEmpty(ratingProfileId)||
+						StringUtils.isEmpty(locationId)||StringUtils.isEmpty(locationId)||StringUtils.isEmpty(titlePhoto)||
+						StringUtils.isEmpty(photoCollection))){
+					
+					String titlePhotoID = UUID.randomUUID().toString();
+				    FSManager.saveImage(titlePhotoID, titlePhoto);
+				    
+				    String photoCollectionId = UUID.randomUUID().toString();
+					
+				    touristAttractionDAO.addTouristAttraction(attractionName,description,ratingProfileId,locationId,titlePhotoID,photoCollectionId);
+					for(String photo : photoCollection){
+						if(!StringUtils.isEmpty(photo)){
+							String photoUrl = UUID.randomUUID().toString();
+							FSManager.saveImage(photoUrl, photo);
+							 
+							touristAttractionPhotoCollectionDAO.addPhotoCollection(photoCollectionId, photoUrl);
+						 
+						}else{response.setStatus("check the payload again");return response;}
+					}
 	
+					response.setStatus("SUCCESS");	
+				}else{
+					
+					response.setStatus("FAILED :Check the payload");
+				}
+					
+		}catch(Exception e){
+			
+			response.setStatus("FAILED: error occured "+e.getMessage());
+		}
+		
+		return response;
+    	
+    	
+    }
 	
-	public BaseResponse handle(DiscoverTouristAttractionRequestBean discoverTouristAttractionRequestBean){
+	public BaseResponse getTouristAttraction(DiscoverTouristAttractionRequestBean discoverTouristAttractionRequestBean){
 		List<DiscoverTouristAttractionPlaceQueryResponseBean> discoverTouristAttractionResponseBeanList= new ArrayList<DiscoverTouristAttractionPlaceQueryResponseBean>();
 		DiscoverTouristAttractionPlaceQueryResponseBean discoverTouristAttractionPlaceQueryResponseBean;
 		DiscoverTouristAttractionPlaceResponseBean responseBean= new DiscoverTouristAttractionPlaceResponseBean();
 		try{
-			List<DiscoverTouristAttractionQueryResponseBean> discoverTouristAttractionQuaryResponseBeanList =touristAttractionDAO.getUserRatingsProfile();
+			List<DiscoverTouristAttractionQueryResponseBean> discoverTouristAttractionQuaryResponseBeanList =locationDetailsDAO.getUserRatingsProfile();
 			
 			double currentLongitude=discoverTouristAttractionRequestBean.getLongitude();
 			double currentLatitude=discoverTouristAttractionRequestBean.getLatitude();
@@ -45,7 +101,8 @@ public class DiscoverTouristAttractionRequestHandler {
 				double latitude =discoverTouristAttractionQueryResponseBean.getLatitude();
 		
 				if(isAttractivePlace(currentLatitude,currentLongitude,latitude,longitude)){
-					discoverTouristAttractionPlaceQueryResponseBean=touristAttractionPlaceDAO.getLocationDetails(discoverTouristAttractionQueryResponseBean.getLocationId());
+					discoverTouristAttractionPlaceQueryResponseBean=touristAttractionDAO.getTouristAttraction(discoverTouristAttractionQueryResponseBean.getLocationId());
+					discoverTouristAttractionPlaceQueryResponseBean.setPhotoUrlCollection(touristAttractionPhotoCollectionDAO.getPhotoCollection(discoverTouristAttractionPlaceQueryResponseBean.getPhotoCollectionId()));	
 					discoverTouristAttractionResponseBeanList.add(discoverTouristAttractionPlaceQueryResponseBean);
 				}if(discoverTouristAttractionResponseBeanList.size()>=10){break;}
 			}
@@ -95,7 +152,7 @@ public class DiscoverTouristAttractionRequestHandler {
         double distance = _eQuatorialEarthRadius * c;
         
        
-        System.out.println("distance "+ Math.abs(distance));
+ //       System.out.println("distance "+ Math.abs(distance));
         return Math.abs(distance);
     }
 
