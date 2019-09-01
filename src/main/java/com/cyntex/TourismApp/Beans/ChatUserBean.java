@@ -3,23 +3,21 @@ package com.cyntex.TourismApp.Beans;
 public class ChatUserBean {
 	private String username; //Foreign key  
 	private String firstname;
-	private byte[] avatarStream;
-	
+	private String  avatar;
 	
 	
 
-
-	public ChatUserBean(String username, String firstname, byte[] avatarStream) {
+	public ChatUserBean(String username, String firstname, String avatar) {
 		super();
 		this.username = username;
 		this.firstname = firstname;
-		this.avatarStream = avatarStream;
+		this.avatar = avatar;
 	}
-	public byte[] getAvatarStream() {
-		return avatarStream;
+	public String getAvatar() {
+		return avatar;
 	}
-	public void setAvatarStream(byte[] avatarStream) {
-		this.avatarStream = avatarStream;
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 	public String getFirstname() {
 		return firstname;

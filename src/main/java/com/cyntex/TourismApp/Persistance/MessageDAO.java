@@ -53,11 +53,12 @@ public class MessageDAO {
                         rs.getInt("message_id"),
                          rs.getString("message"),
                         rs.getDate("created_date"),
-                        new ChatUserBean(rs.getString("username"),rs.getString("first_name"),FSManager.retrieveImage(rs.getString("picture_link"))))
+                        new ChatUserBean(rs.getString("username"),rs.getString("first_name"),rs.getString("picture_link")))
         );
         
 		return queryData;
 	}
+	
 
 	
 }

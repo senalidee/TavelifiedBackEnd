@@ -18,13 +18,6 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 @Component
 public class UserProfileDAO {
 
-	    
-//		 public DiscoverTouristFriendUserProfileQueryResponseBean(String email, String firstName, String lastName, String phone,
-//		           String country, String gender, String imageID){
-//				 super(email,firstName,lastName,phone,country,gender,imageID);
-//
-//				}
-
 	
 	
 }

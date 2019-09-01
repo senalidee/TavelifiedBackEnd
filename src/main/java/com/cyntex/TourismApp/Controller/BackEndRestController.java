@@ -16,6 +16,7 @@ import com.cyntex.TourismApp.Services.AddtouristFriendService;
 import com.cyntex.TourismApp.Services.ChatGroupService;
 import com.cyntex.TourismApp.Services.DiscoverTouristAttractionService;
 import com.cyntex.TourismApp.Services.DiscoverTouristFriendService;
+import com.cyntex.TourismApp.Services.LocationService;
 import com.cyntex.TourismApp.Services.MakeAdminService;
 import com.cyntex.TourismApp.Services.MessageService;
 import com.cyntex.TourismApp.Services.TouristService;
@@ -32,6 +33,7 @@ import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.AuthService;
 import com.cyntex.TourismApp.Util.FSManager;
 import com.cyntex.TourismApp.Util.JSONHandler;
+
 
 
 //>>>>>>> 17255464ae7af3e8bfa154280d0c3f97dd868db7
@@ -80,6 +82,9 @@ public class BackEndRestController {
     
     @Autowired
     private TouristService touristService;
+    
+    @Autowired
+    LocationService locationService;
     
     @RequestMapping(value="/serviceCheck",method= RequestMethod.GET)
     public String serviceCheck() throws Exception{
@@ -321,6 +326,15 @@ public class BackEndRestController {
     public String ContactTouristGuideGetMessage(@RequestBody String data) throws Exception{
     	ContactTouristGuideGetMessageRequestBean contactTouristGuideGetMessageRequestBean = JSONHandler.parseFromJSON(data, ContactTouristGuideGetMessageRequestBean.class);
     	BaseResponse response= messageService.getMessageFromTouristGuide(contactTouristGuideGetMessageRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/addLocation" , method= RequestMethod.POST)
+    public String AddLocation(@RequestBody String data) throws Exception{
+    	AddLocationRequestBean addLocationRequestBean = JSONHandler.parseFromJSON(data, AddLocationRequestBean.class);
+    	BaseResponse response= locationService.handleLocationDetails(addLocationRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     }
