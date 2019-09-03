@@ -93,7 +93,7 @@ public class TouristServiceHandler {
 		List<GetTouristServiceQueryResponseBean> queryResponseList= new ArrayList();
 		try{
 			for(GetTouristServiceQueryResponseBean queryResponseBean:touristServiceDAO.getTouristServiceByTitle(title)){
-				System.out.println(" photo collection id "+ queryResponseBean.getPhotoCollectionId());
+//				System.out.println(" photo collection id "+ queryResponseBean.getPhotoCollectionId());
 				queryResponseBean.setPhotoUrlCollection(touristServicePhotoCollectionDAO.getPhotoCollection(queryResponseBean.getPhotoCollectionId()));
 				queryResponseList.add(queryResponseBean);
 			}

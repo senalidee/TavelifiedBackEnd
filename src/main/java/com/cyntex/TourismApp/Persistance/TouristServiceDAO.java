@@ -37,7 +37,7 @@ public class TouristServiceDAO {
 		
 		dataSourceManager.getJdbcTemplate().update(addTrouristFriendQuery,
                 new Object[] {serviceTitle,serviceDescription,ownername,locationId,titlePhotoUrl,photoCollectionId,ratingProfileId},
-                new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR});
+                new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.INTEGER});
 		
 		
 	}

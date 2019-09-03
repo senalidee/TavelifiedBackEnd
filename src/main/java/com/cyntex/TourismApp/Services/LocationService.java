@@ -18,6 +18,6 @@ public class LocationService {
 		
      public BaseResponse handleLocationDetails(AddLocationRequestBean addLocationRequestBean ){
     	 
-    	 return locationServiceHandler.handleLocationDetails(addLocationRequestBean);
+    	 return locationServiceHandler.addLocationDetails(addLocationRequestBean);
      }
 }

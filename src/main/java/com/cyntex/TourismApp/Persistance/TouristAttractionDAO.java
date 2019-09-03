@@ -17,9 +17,9 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 public class TouristAttractionDAO {
 	
 	private static final String touristAttractionPlacesFetchQuery=
-			"select attraction_name,description,rating_profile_id,location_id,title_photo_url,photo_collection_id from tourist_attaraction where location_id= ?";
+			"select * from tourist_attraction where location_id = ?";
 	private static final String addTouristAttrationQuery=
-			"insert into tourist_attaraction  values (?,?,?,?,?,?)";
+			"insert into tourist_attraction(attraction_name,description,rating_profile_id,location_id,title_photo_url,photo_collection_id)  values (?,?,?,?,?,?)";
 	
     @Autowired
     private DataSourceManager dataSourceManager;
@@ -29,7 +29,7 @@ public class TouristAttractionDAO {
  
     	DiscoverTouristAttractionPlaceQueryResponseBean queryData = dataSourceManager.getJdbcTemplate().query(
     			touristAttractionPlacesFetchQuery, new Object[]{locationId}, new int[]{Types.VARCHAR},
-                (rs, rowNum) -> new DiscoverTouristAttractionPlaceQueryResponseBean(rs.getInt("attaraction_id"),rs.getString("attraction_name"),rs.getString("description"),rs.getString("rating_profile_id"),
+                (rs, rowNum) -> new DiscoverTouristAttractionPlaceQueryResponseBean(rs.getInt("attraction_id"),rs.getString("attraction_name"),rs.getString("description"),rs.getString("rating_profile_id"),
                 		rs.getString("location_id"),rs.getString("title_photo_url"),rs.getString("photo_collection_id"))).get(0);
     	return queryData;
   }
@@ -38,7 +38,7 @@ public class TouristAttractionDAO {
     public void addTouristAttraction(String attractionName,String description,String ratingProfileId,String locationId,String titlePhotoID,String photoCollectionId){
     	
     	dataSourceManager.getJdbcTemplate().update(
-    			touristAttractionPlacesFetchQuery, new Object[]{attractionName,description,ratingProfileId,locationId,titlePhotoID,photoCollectionId},
+    			addTouristAttrationQuery, new Object[]{attractionName,description,ratingProfileId,locationId,titlePhotoID,photoCollectionId},
     			new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR}
                 );
     }

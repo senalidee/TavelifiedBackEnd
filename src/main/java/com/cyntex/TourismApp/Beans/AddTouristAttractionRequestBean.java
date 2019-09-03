@@ -2,7 +2,7 @@ package com.cyntex.TourismApp.Beans;
 
 public class AddTouristAttractionRequestBean {
 	
-	private String AttractionName;
+	private String attractionName;
 	private String description;
 	private String ratingProfileId;
 	private String locationId;
@@ -12,11 +12,12 @@ public class AddTouristAttractionRequestBean {
 	
 	
 	
+
 	public String getAttractionName() {
-		return AttractionName;
+		return attractionName;
 	}
 	public void setAttractionName(String attractionName) {
-		AttractionName = attractionName;
+		this.attractionName = attractionName;
 	}
 	public String getDescription() {
 		return description;

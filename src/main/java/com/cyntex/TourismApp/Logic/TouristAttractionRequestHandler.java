@@ -44,13 +44,18 @@ public class TouristAttractionRequestHandler {
     	String locationId=addTouristAttractionRequestBean.getLocationId();
     	String titlePhoto=addTouristAttractionRequestBean.getTitlePhotoUrl();
     	String[] photoCollection=addTouristAttractionRequestBean.getPhotoCollection();
-    	
-    	
+//    	System.out.println(attractionName);
+//    	System.out.println(description);
+//    	System.out.println(ratingProfileId);
+//    	System.out.println(locationId);
+//    	System.out.println(titlePhoto);
+//    	System.out.println(photoCollection.length);
+
 		AddTouristAttractionResponseBean response = new AddTouristAttractionResponseBean();
 		try{
 				
 				if(!(StringUtils.isEmpty(attractionName)||StringUtils.isEmpty(description)||StringUtils.isEmpty(ratingProfileId)||
-						StringUtils.isEmpty(locationId)||StringUtils.isEmpty(locationId)||StringUtils.isEmpty(titlePhoto)||
+						StringUtils.isEmpty(locationId)||StringUtils.isEmpty(titlePhoto)||
 						StringUtils.isEmpty(photoCollection))){
 					
 					String titlePhotoID = UUID.randomUUID().toString();
@@ -66,7 +71,7 @@ public class TouristAttractionRequestHandler {
 							 
 							touristAttractionPhotoCollectionDAO.addPhotoCollection(photoCollectionId, photoUrl);
 						 
-						}else{response.setStatus("check the payload again");return response;}
+						}else{response.setStatus("check the payload again : photo collection is empty");return response;}
 					}
 	
 					response.setStatus("SUCCESS");	
@@ -101,6 +106,7 @@ public class TouristAttractionRequestHandler {
 				double latitude =discoverTouristAttractionQueryResponseBean.getLatitude();
 		
 				if(isAttractivePlace(currentLatitude,currentLongitude,latitude,longitude)){
+		//			System.out.println("location id : "+discoverTouristAttractionQueryResponseBean.getLocationId());
 					discoverTouristAttractionPlaceQueryResponseBean=touristAttractionDAO.getTouristAttraction(discoverTouristAttractionQueryResponseBean.getLocationId());
 					discoverTouristAttractionPlaceQueryResponseBean.setPhotoUrlCollection(touristAttractionPhotoCollectionDAO.getPhotoCollection(discoverTouristAttractionPlaceQueryResponseBean.getPhotoCollectionId()));	
 					discoverTouristAttractionResponseBeanList.add(discoverTouristAttractionPlaceQueryResponseBean);
@@ -113,9 +119,9 @@ public class TouristAttractionRequestHandler {
 				responseBean.setStatus("FAILED: Check the payload");	
 			}
 		
-			responseBean.setStatus("SUCCESS");
+			
 		}catch(Exception e){
-			responseBean.setStatus("FAILED: "+e.getMessage());
+			responseBean.setStatus("FAILED: this "+e.getMessage());
 			
 	
 			
@@ -152,7 +158,7 @@ public class TouristAttractionRequestHandler {
         double distance = _eQuatorialEarthRadius * c;
         
        
- //       System.out.println("distance "+ Math.abs(distance));
+   //     System.out.println("distance "+ Math.abs(distance));
         return Math.abs(distance);
     }
 

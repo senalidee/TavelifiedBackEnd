@@ -226,6 +226,16 @@ public class BackEndRestController {
     	BaseResponse response =touristAttractionService.discoverTouristAttraction(discoverTouristFriendRequestBean);
     	return JSONHandler.parseToJSON(response);
     }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/addTouristAttraction", method= RequestMethod.POST)
+    public String AddTouristAttraction(@RequestBody String data)throws Exception{
+    	AddTouristAttractionRequestBean addTouristAttractionRequestBean = JSONHandler.parseFromJSON(data, AddTouristAttractionRequestBean.class);
+    	BaseResponse response = touristAttractionService.addTouristAttraction(addTouristAttractionRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
+    }
 
     @CrossOrigin()
     @RequestMapping(value="/addFriendToChatGroup")

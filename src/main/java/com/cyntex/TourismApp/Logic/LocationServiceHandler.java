@@ -15,10 +15,14 @@ import com.cyntex.TourismApp.Persistance.LocationDetailsDAO;
 public class LocationServiceHandler {
 	
 	@Autowired
-	LocationDetailsDAO 	locationDetailsDAO; 
+	LocationDetailsDAO 	locationDetailsDAO;
 	
 	
-	public BaseResponse handleLocationDetails(AddLocationRequestBean addLocationRequestBean){
+	
+	
+	
+	
+	public BaseResponse addLocationDetails(AddLocationRequestBean addLocationRequestBean){
 		String locationId=addLocationRequestBean.getLocationId();
 		double lat=addLocationRequestBean.getLat();
 		double lng=addLocationRequestBean.getLng();
