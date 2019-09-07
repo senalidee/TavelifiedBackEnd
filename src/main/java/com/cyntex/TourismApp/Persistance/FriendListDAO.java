@@ -2,11 +2,14 @@ package com.cyntex.TourismApp.Persistance;
 
 import java.sql.Types;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cyntex.TourismApp.Beans.GetUserFriendQueryResponse;
 import com.cyntex.TourismApp.Util.DataSourceManager;
 
 
@@ -23,26 +26,50 @@ public class FriendListDAO {
 	private static final String checkRecordRequestQuery=
 			"select count(*) as counter from friend_list where username = ? and username_of_friend = ?";
 	
-	@Transactional
-	public void addFriend(String usernameOfRequester, String usernameOfFriend){
-		dataSourceManager.getJdbcTemplate().update(addFriendRequestQuery,
+	private static final String getFriendRequestQuery=
+			"select friend_list as one left join user as two on one.username=two.username from friend_list where username = ? ";
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
+	
+	public void addFriend(String usernameOfRequester, String usernameOfFriend) throws Exception{
+		jdbcTemplate.update(addFriendRequestQuery,
                 new Object[] {usernameOfRequester,usernameOfFriend},
                 new int[]{Types.VARCHAR,Types.VARCHAR});
-		dataSourceManager.getJdbcTemplate().update(addFriendRequestQuery,
+		jdbcTemplate.update(addFriendRequestQuery,
                 new Object[] {usernameOfFriend,usernameOfRequester},
                 new int[]{Types.VARCHAR,Types.VARCHAR});
    	
-		
 	}
 	
 	@Transactional
 	public boolean isRecordAlreadyExists(String usernameOfRequester, String usernameOfFriend){
-		dataSourceManager.getJdbcTemplate().query(checkRecordRequestQuery,
+		jdbcTemplate.query(checkRecordRequestQuery,
                 new Object[] {usernameOfRequester,usernameOfFriend},
                 new int[]{Types.VARCHAR,Types.VARCHAR},(rs,rawNo) -> response=rs.getInt("counter"));
 		
 		if(response == 0){return false;} else{return true;}
 		
 	}
+	
+	public List<GetUserFriendQueryResponse> getFriend(String username){
+		
+		List<GetUserFriendQueryResponse> userFriendResponse=jdbcTemplate.query(getFriendRequestQuery,new Object[]{username},
+				new int[]{Types.INTEGER},(rs,rawNo)-> new GetUserFriendQueryResponse(
+						rs.getString("username"), rs.getString("first_name")+rs.getString("last_name")));
+		
+		
+		return userFriendResponse;
+	}
+	
 
 }

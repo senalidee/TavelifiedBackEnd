@@ -22,6 +22,7 @@ import com.cyntex.TourismApp.Persistance.FriendListDAO;
 import com.cyntex.TourismApp.Persistance.UserDAO;
 import com.cyntex.TourismApp.Persistance.UserProfileDAO;
 import com.cyntex.TourismApp.Persistance.UserRatingsProfileDAO;
+import com.cyntex.TourismApp.Util.DataSourceManager;
 import com.cyntex.TourismApp.Util.UserRatingCalculator;
 
 @Component
@@ -38,6 +39,8 @@ public class DiscoverTouristFriendRequestHandler {
 	
 	@Autowired
 	private FriendListDAO friendListDAO;
+	
+
 
 	public BaseResponse handle(
 		DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean) {

@@ -3,7 +3,10 @@ package com.cyntex.TourismApp.Persistance;
 import java.sql.Types;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cyntex.TourismApp.Beans.AddFriendToChatGroupRequestBean;
@@ -11,9 +14,22 @@ import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Util.DataSourceManager;
 
 
+
 @Component
 public class GroupParticipantDAO {
 	
+	
+//	@Autowired
+//	private JdbcTemplate jdbcTemplate;
+//	
+//	public JdbcTemplate getJdbcTemplate() {
+//		return jdbcTemplate;
+//	}
+//	
+//	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+//		this.jdbcTemplate = jdbcTemplate;
+//	}
+//	
 	@Autowired
 	private DataSourceManager dataSourceManager;
 	
@@ -37,11 +53,22 @@ public class GroupParticipantDAO {
 			"update group_participant set is_admin= '1' where username = ? and chat_group_id = ?";
 			
 	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
 	
 	@Transactional
 	public void makeAdmin(int chatGroupId, String username){
 		
-		dataSourceManager.getJdbcTemplate().update(makeAdmin,
+		jdbcTemplate.update(makeAdmin,
                 new Object[] {username,chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER});
 		
@@ -51,7 +78,7 @@ public class GroupParticipantDAO {
 	@Transactional
 	public boolean checkExistance(int chatGroupId, String username){
 	
-		   dataSourceManager.getJdbcTemplate().query(checkExistance,
+		jdbcTemplate.query(checkExistance,
                 new Object[] {username,chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) ->response= rs.getInt("counter"));
 		   
@@ -67,34 +94,36 @@ public class GroupParticipantDAO {
 	
 	
 
-//	public void addFriend(AddFriendToChatGroupRequestBean addFriendToChatGroupRequestBean){
-//		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
-//		String username=addFriendToChatGroupRequestBean.getUsername();
-//		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
-//		String avatar=addFriendToChatGroupRequestBean.getAvatar();
-	@Transactional
+	
 	public void addFriend(String username,int chatGroupId,String addedBy){
-//		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
-//		String username=addFriendToChatGroupRequestBean.getUsername();
-//		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
-//		String avatar=addFriendToChatGroupRequestBean.getAvatar();
+
 		
-		dataSourceManager.getJdbcTemplate().update(addFriendRequest,
+		jdbcTemplate.update(addFriendRequest,
                 new Object[] {username,chatGroupId,addedBy},
                 new int[]{Types.VARCHAR,Types.INTEGER,Types.VARCHAR});
                 
-	//	(username,chat_group_id,added_by,avatar) values (?,?,?,?)
 	}
-	
-	@Transactional
+
 	public void addAdmin(int chatGroupId,String username){
 		
-		dataSourceManager.getJdbcTemplate().update(addGroupCreator,
+		jdbcTemplate.update(addGroupCreator,
                 new Object[] {username,chatGroupId,1},
                 new int[]{Types.INTEGER,Types.INTEGER,Types.INTEGER});
                 
 		
 	}
+//	public void addFriendAtGroupCreation(String username,int chatGroupId,String addedBy){
+////		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
+////		String username=addFriendToChatGroupRequestBean.getUsername();
+////		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
+////		String avatar=addFriendToChatGroupRequestBean.getAvatar();
+//		
+//		dataSourceManager.getJdbcTemplate().update(addFriendRequest,
+//                new Object[] {username,chatGroupId,addedBy},
+//                new int[]{Types.VARCHAR,Types.INTEGER,Types.VARCHAR});
+//                
+//	//	(username,chat_group_id,added_by,avatar) values (?,?,?,?)
+//	}
 	
 	@Transactional
 	public void deleteFriend(String username , int chatGroupId){

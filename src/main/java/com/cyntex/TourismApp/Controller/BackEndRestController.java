@@ -5,14 +5,14 @@ package com.cyntex.TourismApp.Controller;
 import java.util.List;
 
 import com.cyntex.TourismApp.Beans.*;
-import com.cyntex.TourismApp.Logic.AddFriendRequestHandler;
+import com.cyntex.TourismApp.Logic.FriendRequestHandler;
 import com.cyntex.TourismApp.Logic.ChatGroupRequestHandler;
 import com.cyntex.TourismApp.Logic.DiscoverTouristFriendRequestHandler;
 import com.cyntex.TourismApp.Logic.FoodRequestHandler;
 import com.cyntex.TourismApp.Logic.RatingProfileRequestHandler;
 import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.GroupParticipantService;
-import com.cyntex.TourismApp.Services.AddtouristFriendService;
+import com.cyntex.TourismApp.Services.UserFriendService;
 import com.cyntex.TourismApp.Services.ChatGroupService;
 import com.cyntex.TourismApp.Services.TouristAttractionService;
 import com.cyntex.TourismApp.Services.TouristFriendService;
@@ -66,7 +66,7 @@ public class BackEndRestController {
     private ChatGroupService chatGroupService;
     
     @Autowired
-    private AddtouristFriendService addtouristFriendService;
+    private UserFriendService userFriendService;
     
     @Autowired
     private TouristAttractionService touristAttractionService;
@@ -213,7 +213,17 @@ public class BackEndRestController {
     @RequestMapping(value="/addTouristFriend", method= RequestMethod.POST)
     public String AddTouristFriend(@RequestBody String data)throws Exception{
     	AddFriendRequestBean addFriendRequestBean = JSONHandler.parseFromJSON(data, AddFriendRequestBean.class);
-    	BaseResponse response = addtouristFriendService.addTouristFriend(addFriendRequestBean);
+    	BaseResponse response = userFriendService.addTouristFriend(addFriendRequestBean);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/getUserFriends" , method = RequestMethod.POST)
+    public String getTouristFriend(@RequestBody String data)throws Exception{
+    	GetUserFriendRequest getUserFriendRequest= JSONHandler.parseFromJSON(data, GetUserFriendRequest.class);
+    	BaseResponse response= userFriendService.getUserFriend(getUserFriendRequest);
     	return JSONHandler.parseToJSON(response);
     	
     	
