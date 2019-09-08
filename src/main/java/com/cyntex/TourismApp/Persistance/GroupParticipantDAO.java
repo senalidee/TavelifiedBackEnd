@@ -1,6 +1,8 @@
 package com.cyntex.TourismApp.Persistance;
 
 import java.sql.Types;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cyntex.TourismApp.Beans.AddFriendToChatGroupRequestBean;
 import com.cyntex.TourismApp.Beans.BaseResponse;
+import com.cyntex.TourismApp.Beans.GetUserChatGroupQueryResponseBean;
 import com.cyntex.TourismApp.Util.DataSourceManager;
 
 
@@ -19,17 +22,17 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 public class GroupParticipantDAO {
 	
 	
-//	@Autowired
-//	private JdbcTemplate jdbcTemplate;
-//	
-//	public JdbcTemplate getJdbcTemplate() {
-//		return jdbcTemplate;
-//	}
-//	
-//	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-//		this.jdbcTemplate = jdbcTemplate;
-//	}
-//	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
 	@Autowired
 	private DataSourceManager dataSourceManager;
 	
@@ -51,18 +54,11 @@ public class GroupParticipantDAO {
 	
 	private static final String makeAdmin=
 			"update group_participant set is_admin= '1' where username = ? and chat_group_id = ?";
+	
+	private static final String getUserChatGroupDetails=
+			"select * from group_participant as one left join chat_group as two on (one.chat_group_id=two.chat_group_id) where one.username = ?";
 			
 	
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-	
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
 	
 	
 	@Transactional
@@ -81,8 +77,7 @@ public class GroupParticipantDAO {
 		jdbcTemplate.query(checkExistance,
                 new Object[] {username,chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) ->response= rs.getInt("counter"));
-		   
-//	System.out.println("checkExistance "+response);        
+		          
 		if(response == 0){return false;} else{return true;}
 	}
 //		 int size=dataSourceManager.getJdbcTemplate().queryForList(checkExistance,
@@ -112,18 +107,15 @@ public class GroupParticipantDAO {
                 
 		
 	}
-//	public void addFriendAtGroupCreation(String username,int chatGroupId,String addedBy){
-////		int chatGroupId = addFriendToChatGroupRequestBean.getChatGroupId();
-////		String username=addFriendToChatGroupRequestBean.getUsername();
-////		String addedBy=addFriendToChatGroupRequestBean.getAddedBy();
-////		String avatar=addFriendToChatGroupRequestBean.getAvatar();
-//		
-//		dataSourceManager.getJdbcTemplate().update(addFriendRequest,
-//                new Object[] {username,chatGroupId,addedBy},
-//                new int[]{Types.VARCHAR,Types.INTEGER,Types.VARCHAR});
-//                
-//	//	(username,chat_group_id,added_by,avatar) values (?,?,?,?)
-//	}
+	public List<GetUserChatGroupQueryResponseBean> getUserChatGroup(String username){
+		
+		List<GetUserChatGroupQueryResponseBean> response=jdbcTemplate.query(getUserChatGroupDetails, 
+				new Object[]{username}, new int[]{Types.VARCHAR},
+				(rs,rawNo)-> new GetUserChatGroupQueryResponseBean(rs.getInt("chat_group_id"),rs.getString("group_title")
+						,rs.getString("category"),rs.getDate("created_date")));
+		return response;
+	
+	}
 	
 	@Transactional
 	public void deleteFriend(String username , int chatGroupId){
@@ -143,7 +135,7 @@ public class GroupParticipantDAO {
                 new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) -> response=rs.getInt("counter"));
               
 	    
-	    System.out.println("isAdmin "+response);  
+	 //   System.out.println("isAdmin "+response);  
 		if(response == 0){return false;} else{return true;}
 	}
 	

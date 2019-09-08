@@ -40,7 +40,7 @@ public class FriendRequestHandler {
 			
 	
 	}
-	
+	@Transactional
 	public List<GetUserFriendQueryResponse> getUserFriend(GetUserFriendRequest getUserFriendRequest )throws Exception{
 		String username=getUserFriendRequest.getUsername();
 		

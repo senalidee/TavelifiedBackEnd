@@ -27,7 +27,7 @@ public class FriendListDAO {
 			"select count(*) as counter from friend_list where username = ? and username_of_friend = ?";
 	
 	private static final String getFriendRequestQuery=
-			"select friend_list as one left join user as two on one.username=two.username from friend_list where username = ? ";
+			"select * from friend_list as one left join user as two on (one.username_of_friend=two.username) where one.username = ? ";
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -61,11 +61,11 @@ public class FriendListDAO {
 		
 	}
 	
-	public List<GetUserFriendQueryResponse> getFriend(String username){
+	public List<GetUserFriendQueryResponse> getFriend(String username) throws Exception{
 		
-		List<GetUserFriendQueryResponse> userFriendResponse=jdbcTemplate.query(getFriendRequestQuery,new Object[]{username},
-				new int[]{Types.INTEGER},(rs,rawNo)-> new GetUserFriendQueryResponse(
-						rs.getString("username"), rs.getString("first_name")+rs.getString("last_name")));
+		List<GetUserFriendQueryResponse> userFriendResponse=jdbcTemplate.query(getFriendRequestQuery,
+				new Object[]{username},new int[]{Types.VARCHAR},(rs,rawNo)-> new GetUserFriendQueryResponse(
+						rs.getString("username_of_friend"), rs.getString("first_name")+" " +rs.getString("last_name")));
 		
 		
 		return userFriendResponse;

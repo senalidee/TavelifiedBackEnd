@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.CreateChatGroupRequestBean;
 import com.cyntex.TourismApp.Beans.DeleteChatGroupMemberRequestBean;
+import com.cyntex.TourismApp.Beans.GetUserChatGroupRequestBean;
+import com.cyntex.TourismApp.Beans.GetUserChatGroupResponseBean;
 import com.cyntex.TourismApp.Exception.BadRequestException;
 import com.cyntex.TourismApp.Logic.ChatGroupRequestHandler;
 
@@ -31,6 +33,25 @@ public class ChatGroupService {
 			
 		}
 		return baseResponse;
+	}
+	
+	public BaseResponse getChatUserDetails(GetUserChatGroupRequestBean getUserChatGroupRequestBean) throws Exception{
+		GetUserChatGroupResponseBean baseResponse = new GetUserChatGroupResponseBean();
+		try{
+			baseResponse.setUserChatGroupList(chatGroupRequestHandler.getUserChatGroup(getUserChatGroupRequestBean));
+	        baseResponse.setStatus("SUCCESS");
+		
+		}catch(BadRequestException e){
+		   baseResponse.setStatus(e.getMessage());
+		}catch(Exception e){
+			
+			baseResponse.setStatus("Transaction fails");
+			
+		}
+		return baseResponse;	
+		
+		
+		
 	}
    
 	

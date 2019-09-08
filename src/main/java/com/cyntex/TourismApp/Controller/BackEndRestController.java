@@ -24,6 +24,7 @@ import com.cyntex.TourismApp.Util.JSONHandler;
 
 //=======
 import com.cyntex.TourismApp.Beans.BaseResponse;
+import com.cyntex.TourismApp.Beans.GetUserChatGroupRequestBean;
 import com.cyntex.TourismApp.Beans.LoginRequestBean;
 import com.cyntex.TourismApp.Beans.RatingsProfileRequestBean;
 import com.cyntex.TourismApp.Beans.RegistrationRequestBean;
@@ -33,6 +34,7 @@ import com.cyntex.TourismApp.Logic.TestRequestHandler;
 import com.cyntex.TourismApp.Services.AuthService;
 import com.cyntex.TourismApp.Util.FSManager;
 import com.cyntex.TourismApp.Util.JSONHandler;
+
 
 
 
@@ -252,6 +254,16 @@ public class BackEndRestController {
     public String addFriendToChatGroup(@RequestBody String data) throws Exception{
     	AddFriendToChatGroupRequestBean addFriendToChatGroup = JSONHandler.parseFromJSON(data, AddFriendToChatGroupRequestBean.class);
     	BaseResponse response =groupParticipantService.addFriend(addFriendToChatGroup);
+    	return JSONHandler.parseToJSON(response);
+    	
+    	
+    }
+    
+    @CrossOrigin()
+    @RequestMapping(value="/userGroupChat")
+    public String getChatGroup(@RequestBody String data) throws Exception{
+    	GetUserChatGroupRequestBean getUserChatGroupRequestBean = JSONHandler.parseFromJSON(data, GetUserChatGroupRequestBean.class);
+    	BaseResponse response =chatGroupService.getChatUserDetails(getUserChatGroupRequestBean);
     	return JSONHandler.parseToJSON(response);
     	
     	

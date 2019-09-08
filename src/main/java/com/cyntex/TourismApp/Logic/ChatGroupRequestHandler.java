@@ -15,6 +15,11 @@ import org.springframework.util.StringUtils;
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.CreateChatGroupRequestBean;
 import com.cyntex.TourismApp.Beans.DeleteChatGroupMemberRequestBean;
+import com.cyntex.TourismApp.Beans.GetUserChatGroupQueryResponseBean;
+import com.cyntex.TourismApp.Beans.GetUserChatGroupRequestBean;
+import com.cyntex.TourismApp.Beans.GetUserChatGroupResponseBean;
+import com.cyntex.TourismApp.Beans.GetUserFriendResponse;
+import com.cyntex.TourismApp.Exception.BadRequestException;
 import com.cyntex.TourismApp.Persistance.GroupParticipantDAO;
 import com.cyntex.TourismApp.Persistance.ChatGroupDAO;
 import com.cyntex.TourismApp.Util.DataSourceManager;
@@ -74,6 +79,24 @@ public class ChatGroupRequestHandler {
 		
 	}
 	
+	public List<GetUserChatGroupQueryResponseBean> getUserChatGroup(GetUserChatGroupRequestBean getUserChatGroupRequestBean) throws Exception{
+		
+		String username=getUserChatGroupRequestBean.getUsername();
+		if(!StringUtils.isEmpty(username)){
+			return groupParticipantDAO.getUserChatGroup(username);
+		//	baseResponse.setStatus("SUCCESS");
+			
+			
+		}else{
+		//	baseResponse.setStatus("FAILED : check the payload again");
+			throw new BadRequestException("check the payload again ");
+		}
+		
+		
+		//return baseResponse;
 
+		
+	}
+	
 
 }
