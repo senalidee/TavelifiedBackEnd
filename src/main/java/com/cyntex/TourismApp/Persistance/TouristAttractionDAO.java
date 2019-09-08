@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,29 +18,67 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 public class TouristAttractionDAO {
 	
 	private static final String touristAttractionPlacesFetchQuery=
-			"select * from tourist_attraction where location_id = ?";
+			"select * from tourist_attraction where attraction_id = ?";
 	private static final String addTouristAttrationQuery=
-			"insert into tourist_attraction(attraction_name,description,rating_profile_id,location_id,title_photo_url,photo_collection_id)  values (?,?,?,?,?,?)";
+			"insert into tourist_attraction(attraction_name,description,rating_profile_id,title_photo_url,photo_collection_id,lng,lat)  values (?,?,?,?,?,?,?)";
 	
-    @Autowired
-    private DataSourceManager dataSourceManager;
+	public static final String locationDetailFetcQuery=
+			"select * from tourist_attraction";
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
-    @Transactional
-    public DiscoverTouristAttractionPlaceQueryResponseBean getTouristAttraction(String  locationId ) {
+    public DiscoverTouristAttractionPlaceQueryResponseBean getTouristAttraction(int attraction_id ) throws Exception{
  
-    	DiscoverTouristAttractionPlaceQueryResponseBean queryData = dataSourceManager.getJdbcTemplate().query(
-    			touristAttractionPlacesFetchQuery, new Object[]{locationId}, new int[]{Types.VARCHAR},
-                (rs, rowNum) -> new DiscoverTouristAttractionPlaceQueryResponseBean(rs.getInt("attraction_id"),rs.getString("attraction_name"),rs.getString("description"),rs.getString("rating_profile_id"),
-                		rs.getString("location_id"),rs.getString("title_photo_url"),rs.getString("photo_collection_id"))).get(0);
+    	DiscoverTouristAttractionPlaceQueryResponseBean queryData = jdbcTemplate.query(
+    			touristAttractionPlacesFetchQuery, new Object[]{attraction_id}, new int[]{Types.INTEGER},
+                (rs, rowNum) -> new DiscoverTouristAttractionPlaceQueryResponseBean(rs.getInt("attraction_id"),rs.getDouble("lat"),rs.getDouble("lng"),rs.getString("attraction_name"),
+                	rs.getString("description"),rs.getString("title_photo_url"),rs.getString("photo_collection_id"))).get(0);
     	return queryData;
   }
     
-    @Transactional
-    public void addTouristAttraction(String attractionName,String description,String ratingProfileId,String locationId,String titlePhotoID,String photoCollectionId){
+
+    public void addTouristAttraction(String attractionName,String description,String ratingProfileId,String titlePhotoID,String photoCollectionId,double lng,double lat) throws Exception{
     	
-    	dataSourceManager.getJdbcTemplate().update(
-    			addTouristAttrationQuery, new Object[]{attractionName,description,ratingProfileId,locationId,titlePhotoID,photoCollectionId},
-    			new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR}
+    	jdbcTemplate.update(
+    			addTouristAttrationQuery, new Object[]{attractionName,description,ratingProfileId,titlePhotoID,photoCollectionId,lng,lat},
+    			new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.DOUBLE,Types.DOUBLE}
                 );
     }
+    
+
+	
+//	private static final String addLocationQuery=
+//			"insert into location values (?,?,?)";
+	
+
+	
+//	@Transactional
+//	public void addLocationDetails(String locationId,double lat, double lng){
+//		
+//		jdbcTemplate.update(addLocationQuery,new Object[]{locationId,lng,lat}
+//		,new int[]{Types.VARCHAR,Types.DOUBLE,Types.DOUBLE});
+//		
+//		
+//	}
+
+	
+
+
+    public List<DiscoverTouristAttractionQueryResponseBean> getUserRatingsProfile() {
+
+    	List<DiscoverTouristAttractionQueryResponseBean> queryData = jdbcTemplate.query(
+    			locationDetailFetcQuery, 
+                (rs, rowNum) -> new DiscoverTouristAttractionQueryResponseBean( rs.getInt("attraction_id"),rs.getDouble("lng"),rs.getDouble("lat")));
+	
+    	return queryData;
+    }
+
 }

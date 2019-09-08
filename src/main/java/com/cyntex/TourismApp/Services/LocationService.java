@@ -12,12 +12,12 @@ import com.cyntex.TourismApp.Logic.LocationServiceHandler;
 @Service
 public class LocationService {
 	
-
-	@Autowired
-	LocationServiceHandler locationServiceHandler;
-		
-     public BaseResponse handleLocationDetails(AddLocationRequestBean addLocationRequestBean ){
-    	 
-    	 return locationServiceHandler.addLocationDetails(addLocationRequestBean);
-     }
+//
+//	@Autowired
+//	LocationServiceHandler locationServiceHandler;
+//		
+//     public BaseResponse handleLocationDetails(AddLocationRequestBean addLocationRequestBean ){
+//    	 
+//    	 return locationServiceHandler.addLocationDetails(addLocationRequestBean);
+//     }
 }

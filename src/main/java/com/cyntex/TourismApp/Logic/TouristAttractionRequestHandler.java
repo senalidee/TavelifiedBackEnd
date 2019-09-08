@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.AddTouristAttractionRequestBean;
@@ -17,18 +19,17 @@ import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionPlaceQueryResponseBe
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionPlaceResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionQueryResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionRequestBean;
+import com.cyntex.TourismApp.Exception.BadRequestException;
 import com.cyntex.TourismApp.Persistance.LocationDetailsDAO;
 import com.cyntex.TourismApp.Persistance.TouristAttractionDAO;
 import com.cyntex.TourismApp.Persistance.TouristAttractionPhotoCollectionDAO;
-
 import com.cyntex.TourismApp.Util.FSManager;
 import com.fasterxml.jackson.databind.deser.Deserializers.Base;
 
 
 @Component
 public class TouristAttractionRequestHandler {
-	@Autowired
-	LocationDetailsDAO  locationDetailsDAO;
+
 	
 	@Autowired
 	TouristAttractionDAO touristAttractionDAO;
@@ -36,14 +37,15 @@ public class TouristAttractionRequestHandler {
 	@Autowired
 	TouristAttractionPhotoCollectionDAO touristAttractionPhotoCollectionDAO;
 	
-	
-    public BaseResponse addTouristAttraction(AddTouristAttractionRequestBean addTouristAttractionRequestBean){
+	@Transactional(propagation=Propagation.REQUIRED)  // doing two transaction using same connection
+    public void addTouristAttraction(AddTouristAttractionRequestBean addTouristAttractionRequestBean) throws Exception{
     	String attractionName=addTouristAttractionRequestBean.getAttractionName();
     	String description=addTouristAttractionRequestBean.getDescription();
     	String ratingProfileId=addTouristAttractionRequestBean.getRatingProfileId();
-    	String locationId=addTouristAttractionRequestBean.getLocationId();
-    	String titlePhoto=addTouristAttractionRequestBean.getTitlePhotoUrl();
+    	String titlePhoto=addTouristAttractionRequestBean.getTitlePhoto();
     	String[] photoCollection=addTouristAttractionRequestBean.getPhotoCollection();
+    	double lng=addTouristAttractionRequestBean.getLng();
+    	double lat=addTouristAttractionRequestBean.getLat();
 //    	System.out.println(attractionName);
 //    	System.out.println(description);
 //    	System.out.println(ratingProfileId);
@@ -51,51 +53,52 @@ public class TouristAttractionRequestHandler {
 //    	System.out.println(titlePhoto);
 //    	System.out.println(photoCollection.length);
 
-		AddTouristAttractionResponseBean response = new AddTouristAttractionResponseBean();
-		try{
-				
-				if(!(StringUtils.isEmpty(attractionName)||StringUtils.isEmpty(description)||StringUtils.isEmpty(ratingProfileId)||
-						StringUtils.isEmpty(locationId)||StringUtils.isEmpty(titlePhoto)||
-						StringUtils.isEmpty(photoCollection))){
-					
-					String titlePhotoID = UUID.randomUUID().toString();
-				    FSManager.saveImage(titlePhotoID, titlePhoto);
-				    
-				    String photoCollectionId = UUID.randomUUID().toString();
-					
-				    touristAttractionDAO.addTouristAttraction(attractionName,description,ratingProfileId,locationId,titlePhotoID,photoCollectionId);
-					for(String photo : photoCollection){
-						if(!StringUtils.isEmpty(photo)){
-							String photoUrl = UUID.randomUUID().toString();
-							FSManager.saveImage(photoUrl, photo);
-							 
-							touristAttractionPhotoCollectionDAO.addPhotoCollection(photoCollectionId, photoUrl);
-						 
-						}else{response.setStatus("check the payload again : photo collection is empty");return response;}
-					}
-	
-					response.setStatus("SUCCESS");	
-				}else{
-					
-					response.setStatus("FAILED :Check the payload");
-				}
-					
-		}catch(Exception e){
+//		AddTouristAttractionResponseBean response = new AddTouristAttractionResponseBean();
+//		try{
 			
-			response.setStatus("FAILED: error occured "+e.getMessage());
-		}
-		
-		return response;
+			if(!(StringUtils.isEmpty(attractionName)||StringUtils.isEmpty(description)||StringUtils.isEmpty(ratingProfileId)
+					||StringUtils.isEmpty(titlePhoto)||
+					StringUtils.isEmpty(photoCollection))){
+				
+				String titlePhotoID = UUID.randomUUID().toString();
+			    FSManager.saveImage(titlePhotoID, titlePhoto);
+			    
+			    String photoCollectionId = UUID.randomUUID().toString();
+				
+			    touristAttractionDAO.addTouristAttraction(attractionName,description,ratingProfileId,titlePhotoID,photoCollectionId,lng,lat);
+				for(String photo : photoCollection){
+					if(!StringUtils.isEmpty(photo)){
+						String photoUrl = UUID.randomUUID().toString();
+						FSManager.saveImage(photoUrl, photo);
+						 
+						touristAttractionPhotoCollectionDAO.addPhotoCollection(photoCollectionId, photoUrl);
+					 
+					}else{
+						throw new BadRequestException("check the payload again : problem with photo collection ");
+					}
+				}
+
+				
+			}else{
+				throw new BadRequestException("FAILED :Check the payload");
+				//response.setStatus("FAILED :Check the payload");
+			}
+					
+//		}catch(Exception e){
+//			
+//			response.setStatus("FAILED: error occured "+e.getMessage());
+//		}
+//		
+//		return response;
     	
     	
     }
-	
-	public BaseResponse getTouristAttraction(DiscoverTouristAttractionRequestBean discoverTouristAttractionRequestBean){
+	@Transactional(propagation=Propagation.REQUIRED)
+	public List<DiscoverTouristAttractionPlaceQueryResponseBean> getTouristAttraction(DiscoverTouristAttractionRequestBean discoverTouristAttractionRequestBean) throws Exception{
 		List<DiscoverTouristAttractionPlaceQueryResponseBean> discoverTouristAttractionResponseBeanList= new ArrayList<DiscoverTouristAttractionPlaceQueryResponseBean>();
 		DiscoverTouristAttractionPlaceQueryResponseBean discoverTouristAttractionPlaceQueryResponseBean;
-		DiscoverTouristAttractionPlaceResponseBean responseBean= new DiscoverTouristAttractionPlaceResponseBean();
-		try{
-			List<DiscoverTouristAttractionQueryResponseBean> discoverTouristAttractionQuaryResponseBeanList =locationDetailsDAO.getUserRatingsProfile();
+		
+		List<DiscoverTouristAttractionQueryResponseBean> discoverTouristAttractionQuaryResponseBeanList =touristAttractionDAO.getUserRatingsProfile();
 			
 			double currentLongitude=discoverTouristAttractionRequestBean.getLongitude();
 			double currentLatitude=discoverTouristAttractionRequestBean.getLatitude();
@@ -107,28 +110,22 @@ public class TouristAttractionRequestHandler {
 		
 				if(isAttractivePlace(currentLatitude,currentLongitude,latitude,longitude)){
 		//			System.out.println("location id : "+discoverTouristAttractionQueryResponseBean.getLocationId());
-					discoverTouristAttractionPlaceQueryResponseBean=touristAttractionDAO.getTouristAttraction(discoverTouristAttractionQueryResponseBean.getLocationId());
+					discoverTouristAttractionPlaceQueryResponseBean=touristAttractionDAO.getTouristAttraction(discoverTouristAttractionQueryResponseBean.getAttraction_id());
 					discoverTouristAttractionPlaceQueryResponseBean.setPhotoUrlCollection(touristAttractionPhotoCollectionDAO.getPhotoCollection(discoverTouristAttractionPlaceQueryResponseBean.getPhotoCollectionId()));	
 					discoverTouristAttractionResponseBeanList.add(discoverTouristAttractionPlaceQueryResponseBean);
 				}if(discoverTouristAttractionResponseBeanList.size()>=10){break;}
 			}
-			responseBean.setStatus("SUCCESS");
-			
-			responseBean.setDiscoverTouristAttractionPlaceQueryResponseBean(discoverTouristAttractionResponseBeanList);
+		
+	
 			}else{
-				responseBean.setStatus("FAILED: Check the payload");	
+				throw new BadRequestException("Check the payload again");
 			}
 		
-			
-		}catch(Exception e){
-			responseBean.setStatus("FAILED: this "+e.getMessage());
-			
-	
-			
-		}
-		
-		return responseBean;
+		return discoverTouristAttractionResponseBeanList;
 	}
+	
+	
+	
 	public boolean isAttractivePlace(double lat1,double long1,double lat2,double long2){
 		if(HaversineInM(lat1,long1,lat2,long2)<100){
 			return true;

@@ -1,7 +1,7 @@
 package com.cyntex.TourismApp.Beans;
 
 public class DiscoverTouristAttractionQueryResponseBean {
-	private String  locationId;
+	private int  attraction_id;
 	private double longitude;
 	private double latitude;
 	
@@ -17,21 +17,22 @@ public class DiscoverTouristAttractionQueryResponseBean {
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-
-	public DiscoverTouristAttractionQueryResponseBean(String locationId,
+	public int getAttraction_id() {
+		return attraction_id;
+	}
+	public void setAttraction_id(int attraction_id) {
+		this.attraction_id = attraction_id;
+	}
+	public DiscoverTouristAttractionQueryResponseBean(int attraction_id,
 			double longitude, double latitude) {
 		super();
-		this.locationId = locationId;
+		this.attraction_id = attraction_id;
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
-	public String getLocationId() {
-		return locationId;
-	}
 
-	public void setLocationId(String locationId) {
-		this.locationId = locationId;
-	}
+
+	
 	
 
 }

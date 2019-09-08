@@ -22,9 +22,6 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 public class ChatGroupDAO {
 	@Autowired
 	GroupParticipantDAO groupParticipantDAO;
-   
-	@Autowired
-	DataSourceManager dataSourceManager;
 	
 	
 	@Autowired

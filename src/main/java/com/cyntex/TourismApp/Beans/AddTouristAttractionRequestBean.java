@@ -5,14 +5,27 @@ public class AddTouristAttractionRequestBean {
 	private String attractionName;
 	private String description;
 	private String ratingProfileId;
-	private String locationId;
-	private String titlePhotoUrl;
+	private String titlePhoto;
 	//private String photoCollectionId;
 	private String[] photoCollection;
+	private double lng;
+	private double lat;
 	
 	
 	
 
+	public double getLng() {
+		return lng;
+	}
+	public void setLng(double lng) {
+		this.lng = lng;
+	}
+	public double getLat() {
+		return lat;
+	}
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
 	public String getAttractionName() {
 		return attractionName;
 	}
@@ -31,17 +44,11 @@ public class AddTouristAttractionRequestBean {
 	public void setRatingProfileId(String ratingProfileId) {
 		this.ratingProfileId = ratingProfileId;
 	}
-	public String getLocationId() {
-		return locationId;
+	public String getTitlePhoto() {
+		return titlePhoto;
 	}
-	public void setLocationId(String locationId) {
-		this.locationId = locationId;
-	}
-	public String getTitlePhotoUrl() {
-		return titlePhotoUrl;
-	}
-	public void setTitlePhotoUrl(String titlePhotoUrl) {
-		this.titlePhotoUrl = titlePhotoUrl;
+	public void setTitlePhoto(String titlePhoto) {
+		this.titlePhoto = titlePhoto;
 	}
 	public String[] getPhotoCollection() {
 		return photoCollection;
