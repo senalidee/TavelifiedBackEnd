@@ -37,7 +37,7 @@ public class TouristAttractionRequestHandler {
 	@Autowired
 	TouristAttractionPhotoCollectionDAO touristAttractionPhotoCollectionDAO;
 	
-	@Transactional(propagation=Propagation.REQUIRED)  // doing two transaction using same connection
+	@Transactional(propagation=Propagation.REQUIRED)  
     public void addTouristAttraction(AddTouristAttractionRequestBean addTouristAttractionRequestBean) throws Exception{
     	String attractionName=addTouristAttractionRequestBean.getAttractionName();
     	String description=addTouristAttractionRequestBean.getDescription();
@@ -46,15 +46,6 @@ public class TouristAttractionRequestHandler {
     	String[] photoCollection=addTouristAttractionRequestBean.getPhotoCollection();
     	double lng=addTouristAttractionRequestBean.getLng();
     	double lat=addTouristAttractionRequestBean.getLat();
-//    	System.out.println(attractionName);
-//    	System.out.println(description);
-//    	System.out.println(ratingProfileId);
-//    	System.out.println(locationId);
-//    	System.out.println(titlePhoto);
-//    	System.out.println(photoCollection.length);
-
-//		AddTouristAttractionResponseBean response = new AddTouristAttractionResponseBean();
-//		try{
 			
 			if(!(StringUtils.isEmpty(attractionName)||StringUtils.isEmpty(description)||StringUtils.isEmpty(ratingProfileId)
 					||StringUtils.isEmpty(titlePhoto)||
@@ -81,16 +72,9 @@ public class TouristAttractionRequestHandler {
 				
 			}else{
 				throw new BadRequestException("FAILED :Check the payload");
-				//response.setStatus("FAILED :Check the payload");
+
 			}
 					
-//		}catch(Exception e){
-//			
-//			response.setStatus("FAILED: error occured "+e.getMessage());
-//		}
-//		
-//		return response;
-    	
     	
     }
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -109,7 +93,6 @@ public class TouristAttractionRequestHandler {
 				double latitude =discoverTouristAttractionQueryResponseBean.getLatitude();
 		
 				if(isAttractivePlace(currentLatitude,currentLongitude,latitude,longitude)){
-		//			System.out.println("location id : "+discoverTouristAttractionQueryResponseBean.getLocationId());
 					discoverTouristAttractionPlaceQueryResponseBean=touristAttractionDAO.getTouristAttraction(discoverTouristAttractionQueryResponseBean.getAttraction_id());
 					discoverTouristAttractionPlaceQueryResponseBean.setPhotoUrlCollection(touristAttractionPhotoCollectionDAO.getPhotoCollection(discoverTouristAttractionPlaceQueryResponseBean.getPhotoCollectionId()));	
 					discoverTouristAttractionResponseBeanList.add(discoverTouristAttractionPlaceQueryResponseBean);

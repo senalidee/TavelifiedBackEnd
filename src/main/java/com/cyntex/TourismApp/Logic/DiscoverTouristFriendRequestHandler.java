@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
@@ -18,6 +20,7 @@ import com.cyntex.TourismApp.Beans.RatingsProfileRequestBean;
 import com.cyntex.TourismApp.Beans.RatingsProfileResponseBean;
 import com.cyntex.TourismApp.Beans.RegistrationRequestBean;
 import com.cyntex.TourismApp.Beans.UserRating;
+import com.cyntex.TourismApp.Exception.BadRequestException;
 import com.cyntex.TourismApp.Persistance.FriendListDAO;
 import com.cyntex.TourismApp.Persistance.UserDAO;
 import com.cyntex.TourismApp.Persistance.UserProfileDAO;
@@ -41,19 +44,16 @@ public class DiscoverTouristFriendRequestHandler {
 	private FriendListDAO friendListDAO;
 	
 
-
-	public BaseResponse handle(
-		DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean) {
+    @Transactional(propagation=Propagation.REQUIRED)
+	public List<DiscoverTouristFriendUserProfileQueryResponseBean> discoverTouristFriend (
+		DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean) throws Exception {
 		
-        DiscoverTouristFriendResponseBean responseBean= new DiscoverTouristFriendResponseBean();
-        
 		RatingsProfileResponseBean ProfileResponseBean = new RatingsProfileResponseBean();
 		
 		List<UserRating> requestedUserRatingList = new ArrayList<UserRating>();
 		
 		List<DiscoverTouristFriendUserProfileQueryResponseBean> touristFriendProfileList = new ArrayList<DiscoverTouristFriendUserProfileQueryResponseBean>();
 		String requesterUsername=discoverTouristFriendRequestBean.getUsername();
-		try {
 	 
 			if(!StringUtils.isEmpty(requesterUsername)){
 			List<RatingsProfileQueryResponseBean> queryResponse = userRatingsProfileDAO
@@ -85,20 +85,12 @@ public class DiscoverTouristFriendRequestHandler {
 				}
 
 			}
-			responseBean.setUserProfiles(touristFriendProfileList);
 			}else{
-				 responseBean.setStatus("FAILED:Check the payload Again");
-				
+				throw new BadRequestException("FAILED:Check the payload Again");				
 			}
-				
-			
-			 responseBean.setStatus("SUCCESS");
-		} catch (Exception e) {
-		    responseBean.setStatus("FAILED: "+e.getMessage());
-			
-		}
+
 		
-		return responseBean;
+		return touristFriendProfileList;
 
 	
      }

@@ -2,6 +2,7 @@ package com.cyntex.TourismApp.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.cyntex.TourismApp.Beans.AddFriendRequestBean;
@@ -23,7 +24,7 @@ public class UserFriendService {
 		friendRequestHandler.addTouristFriend(addFriendRequestBean);
 		response.setStatus("SUCCESS");
 		
-		}catch(DataIntegrityViolationException  e){
+		}catch(DuplicateKeyException  e){
 			response.setStatus("FAILED : "+"Friend is already added");
 			
 		}
@@ -46,7 +47,7 @@ public class UserFriendService {
 		response.setUserFriendList(friendRequestHandler.getUserFriend(getUserFriendRequest));
 		response.setStatus("SUCCESS");
 		
-		}catch(DataIntegrityViolationException  e){
+		}catch(DuplicateKeyException  e){
 			response.setStatus("FAILED : "+"Friend is already added");
 			
 		}

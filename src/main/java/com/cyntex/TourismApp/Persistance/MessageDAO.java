@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.datetime.standard.DateTimeContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,16 @@ public class MessageDAO {
 	@Autowired
 	private DataSourceManager dataSourceManager;
 	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	private static final String saveMessageQuery=
 			"insert into message_details(chat_group_id,username,first_name, message ,created_date) values (?,?,?,?,?)";
@@ -29,23 +40,18 @@ public class MessageDAO {
 			"select * from message_details as one left join group_participant as two on ( one.username = two.username and one.chat_group_id = two.chat_group_id )left join user as three on two.username=three.username  where one.chat_group_id = ?  order by one.created_date ";
 	
 	
-//	messageDAO.saveMessage(chatGroupId,username,message);
 
-	
-	
-	
-	@Transactional
 	public void saveMessage(int chatGroupId, String username,String first_name,  String message){
-		dataSourceManager.getJdbcTemplate().update(saveMessageQuery,
+		jdbcTemplate.update(saveMessageQuery,
                 new Object[] {chatGroupId,username,first_name ,message, new Date()},
                 new int[]{Types.INTEGER,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.DATE});
 
 		
 	}
 	
-	@Transactional
+
 	public List<SendMessageQueryResponsBean> getMessageDetails(int chat_group_id){
-		 List<SendMessageQueryResponsBean> queryData = dataSourceManager.getJdbcTemplate().query(
+		 List<SendMessageQueryResponsBean> queryData = jdbcTemplate.query(
 				getMessageDetailsQuery,
                 new Object[] {chat_group_id},
                 new int[]{Types.INTEGER},

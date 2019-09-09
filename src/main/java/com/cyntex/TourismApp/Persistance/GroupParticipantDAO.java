@@ -33,9 +33,6 @@ public class GroupParticipantDAO {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	@Autowired
-	private DataSourceManager dataSourceManager;
-	
 	private int response;
 	
 	private static final String checkExistance=
@@ -59,9 +56,6 @@ public class GroupParticipantDAO {
 			"select * from group_participant as one left join chat_group as two on (one.chat_group_id=two.chat_group_id) where one.username = ?";
 			
 	
-	
-	
-	@Transactional
 	public void makeAdmin(int chatGroupId, String username){
 		
 		jdbcTemplate.update(makeAdmin,
@@ -70,25 +64,16 @@ public class GroupParticipantDAO {
 		
 		
 	}		
-		
-	@Transactional
+
 	public boolean checkExistance(int chatGroupId, String username){
 	
 		jdbcTemplate.query(checkExistance,
                 new Object[] {username,chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) ->response= rs.getInt("counter"));
-		          
+	    
 		if(response == 0){return false;} else{return true;}
 	}
-//		 int size=dataSourceManager.getJdbcTemplate().queryForList(checkExistance,
-//                new Object[] {username,chatGroupId},
-//                new int[]{Types.VARCHAR,Types.INTEGER}
-//                ).size();
-
-//		return size;
 	
-	
-
 	
 	public void addFriend(String username,int chatGroupId,String addedBy){
 
@@ -117,25 +102,22 @@ public class GroupParticipantDAO {
 	
 	}
 	
-	@Transactional
 	public void deleteFriend(String username , int chatGroupId){
 		
-		dataSourceManager.getJdbcTemplate().update(deleteFriendRequest,
+		jdbcTemplate.update(deleteFriendRequest,
                 new Object[] {username, chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER});
                 
 		
 	}
 	
-	@Transactional
+	
 	public boolean isAdmin(String addedBy, int chatGroupId){
 		
-	    dataSourceManager.getJdbcTemplate().query(checkIsAdmin,
+		jdbcTemplate.query(checkIsAdmin,
                 new Object[] {addedBy,chatGroupId},
                 new int[]{Types.VARCHAR,Types.INTEGER},(rs,rawNo) -> response=rs.getInt("counter"));
-              
-	    
-	 //   System.out.println("isAdmin "+response);  
+
 		if(response == 0){return false;} else{return true;}
 	}
 	

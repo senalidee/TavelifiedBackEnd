@@ -39,11 +39,6 @@ public class ChatGroupRequestHandler {
 	private GroupParticipantDAO groupParticipantDAO;
 	
 	
-
-	
-	
-	
-//	String createChatGroupRequest;
 	@Transactional(propagation=Propagation.REQUIRED)
 	public BaseResponse createChatGroup(CreateChatGroupRequestBean createChatGroupRequestBean) throws Exception{
 		BaseResponse baseResponse = new BaseResponse();
@@ -79,23 +74,18 @@ public class ChatGroupRequestHandler {
 		
 	}
 	
+	@Transactional
 	public List<GetUserChatGroupQueryResponseBean> getUserChatGroup(GetUserChatGroupRequestBean getUserChatGroupRequestBean) throws Exception{
 		
 		String username=getUserChatGroupRequestBean.getUsername();
 		if(!StringUtils.isEmpty(username)){
 			return groupParticipantDAO.getUserChatGroup(username);
-		//	baseResponse.setStatus("SUCCESS");
-			
-			
+				
 		}else{
-		//	baseResponse.setStatus("FAILED : check the payload again");
 			throw new BadRequestException("check the payload again ");
 		}
 		
-		
-		//return baseResponse;
 
-		
 	}
 	
 

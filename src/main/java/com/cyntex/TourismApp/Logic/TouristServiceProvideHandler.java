@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.AddServiceProviderRequestBean;
@@ -26,7 +28,7 @@ public class TouristServiceProvideHandler {
 	@Autowired
 	ServiceProviderDAO serviceProviderDAO;
 	
-	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void addServiceProvider(AddServiceProviderRequestBean addServiceProviderRequestBean) throws  Exception{
 		
 		AddServiceProviderResponseBean response= new AddServiceProviderResponseBean();

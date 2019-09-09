@@ -54,23 +54,6 @@ public class TouristAttractionDAO {
     }
     
 
-	
-//	private static final String addLocationQuery=
-//			"insert into location values (?,?,?)";
-	
-
-	
-//	@Transactional
-//	public void addLocationDetails(String locationId,double lat, double lng){
-//		
-//		jdbcTemplate.update(addLocationQuery,new Object[]{locationId,lng,lat}
-//		,new int[]{Types.VARCHAR,Types.DOUBLE,Types.DOUBLE});
-//		
-//		
-//	}
-
-	
-
 
     public List<DiscoverTouristAttractionQueryResponseBean> getUserRatingsProfile() {
 

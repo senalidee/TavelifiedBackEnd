@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,16 @@ public class MessageTouristGuideDAO {
 	@Autowired
 	DataSourceManager dataSourceManager;
 	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 	
 	private static final String saveMessageQuery=
 			"insert into message_details_guide(service_id,username,first_name, message ,created_date) values (?,?,?,?,?)";
@@ -29,19 +40,17 @@ public class MessageTouristGuideDAO {
 			"select * from message_details_guide as one left join user as two on (one.username = two.username) where (one.service_id = ?  and two.username= ? ) order by one.created_date ";
 	
 	
-	
-	@Transactional
+
 	public void saveMessage(int serviceId, String username,String firstname,  String message){
-		dataSourceManager.getJdbcTemplate().update(saveMessageQuery,
+		jdbcTemplate.update(saveMessageQuery,
                 new Object[] {serviceId,username,firstname ,message, new Date()},
                 new int[]{Types.INTEGER,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.DATE});
 
 		
 	}
-	
-	@Transactional
+
 	public List<ContactTouristGuideGetMessageQueryResponseBean> getMessageDetails(int serviceId ,String username){
-		 List<ContactTouristGuideGetMessageQueryResponseBean> queryData = dataSourceManager.getJdbcTemplate().query(
+		 List<ContactTouristGuideGetMessageQueryResponseBean> queryData = jdbcTemplate.query(
 				getMessageDetailsQuery,
                 new Object[] {serviceId , username},
                 new int[]{Types.INTEGER,Types.VARCHAR},

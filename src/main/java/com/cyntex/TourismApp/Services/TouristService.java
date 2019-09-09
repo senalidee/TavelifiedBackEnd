@@ -40,7 +40,7 @@ public class TouristService {
 			
 		}catch(Exception e){
 			
-			baseResponse.setStatus("Transaction fails"+e.getMessage());
+			baseResponse.setStatus("Transaction fails "+e.getMessage());
 			
 		}
 		return baseResponse;
@@ -76,6 +76,7 @@ public class TouristService {
 	}
 	
 	public BaseResponse getTouristServicesByTitle(String title){
+		
 		GetTouristServiceResponseBean  baseResponse = new GetTouristServiceResponseBean();
 		
 		try{

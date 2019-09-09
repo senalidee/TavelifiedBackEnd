@@ -16,18 +16,15 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 @Component
 public class FriendListDAO {
 	
-	@Autowired
-	private DataSourceManager dataSourceManager;
-	
 	private int response;
 	
 	private static final String addFriendRequestQuery=
 			"insert into friend_list values (?,?)";
 	private static final String checkRecordRequestQuery=
-			"select count(*) as counter from friend_list where username = ? and username_of_friend = ?";
+			"select count(*) as counter from friend_list where username = ? and friendname = ?";
 	
 	private static final String getFriendRequestQuery=
-			"select * from friend_list as one left join user as two on (one.username_of_friend=two.username) where one.username = ? ";
+			"select * from friend_list as one left join user as two on (one.friendname=two.username) where one.username = ? ";
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -51,7 +48,6 @@ public class FriendListDAO {
    	
 	}
 	
-	@Transactional
 	public boolean isRecordAlreadyExists(String usernameOfRequester, String usernameOfFriend){
 		jdbcTemplate.query(checkRecordRequestQuery,
                 new Object[] {usernameOfRequester,usernameOfFriend},
@@ -65,7 +61,7 @@ public class FriendListDAO {
 		
 		List<GetUserFriendQueryResponse> userFriendResponse=jdbcTemplate.query(getFriendRequestQuery,
 				new Object[]{username},new int[]{Types.VARCHAR},(rs,rawNo)-> new GetUserFriendQueryResponse(
-						rs.getString("username_of_friend"), rs.getString("first_name")+" " +rs.getString("last_name")));
+						rs.getString("friendname"), rs.getString("first_name")+" " +rs.getString("last_name")));
 		
 		
 		return userFriendResponse;

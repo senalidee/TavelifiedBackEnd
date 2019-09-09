@@ -41,7 +41,6 @@ public class TouristServiceHandler {
 	public BaseResponse addTouristService(AddTouristServiceRequestBean addTouristServiceRequestBean) throws Exception{
 		String addedBy=addTouristServiceRequestBean.getAddedBy();
 		String ownername=addTouristServiceRequestBean.getOwnername();
-		//String photoCollectionId=addTouristServiceRequestBean.getPhotoCollectionId();
 		String ratingProfileId=addTouristServiceRequestBean.getRatingProfileId();
 		String serviceDescription=addTouristServiceRequestBean.getServiceDescription();
 		String serviceTitle=addTouristServiceRequestBean.getServiceTitle();
@@ -89,16 +88,12 @@ public class TouristServiceHandler {
 		return response;
 	}
 	
-	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public List<GetTouristServiceQueryResponseBean> getTouristServiceByTitle(String title) throws Exception{
 		
-		
-	//	GetTouristServiceResponseBean  response = new GetTouristServiceResponseBean();
-	//	GetTouristServiceQueryResponseBean queryResponse;
 		List<GetTouristServiceQueryResponseBean> queryResponseList= new ArrayList();
 
 			for(GetTouristServiceQueryResponseBean queryResponseBean:touristServiceDAO.getTouristServiceByTitle(title)){
-//				System.out.println(" photo collection id "+ queryResponseBean.getPhotoCollectionId());
 				queryResponseBean.setPhotoUrlCollection(touristServicePhotoCollectionDAO.getPhotoCollection(queryResponseBean.getPhotoCollectionId()));
 				queryResponseList.add(queryResponseBean);
 			}
@@ -107,12 +102,10 @@ public class TouristServiceHandler {
 		return queryResponseList;
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public List<GetTouristServiceQueryResponseBean> getAllTouristServices() throws Exception{
-		List<GetTouristServiceQueryResponseBean> queryResponseList= new ArrayList();
-	
-			
+		List<GetTouristServiceQueryResponseBean> queryResponseList= new ArrayList();	
 			for(GetTouristServiceQueryResponseBean queryResponseBean: touristServiceDAO.getAllTouristServices()){
-//				System.out.println(" photo collection id "+ queryResponseBean.getPhotoCollectionId());
 				queryResponseBean.setPhotoUrlCollection(touristServicePhotoCollectionDAO.getPhotoCollection(queryResponseBean.getPhotoCollectionId()));
 				queryResponseList.add(queryResponseBean);
 			}

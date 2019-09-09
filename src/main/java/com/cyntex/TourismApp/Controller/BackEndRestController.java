@@ -338,15 +338,7 @@ public class BackEndRestController {
     	return JSONHandler.parseToJSON(response);
     	
     }
-    
-//    @CrossOrigin()
-//    @RequestMapping(value="/addServiceProvider" , method= RequestMethod.POST)
-//    public String addTouristService(@RequestBody String data) throws Exception{
-//    	AddTouristServiceRequestBean addTouristServiceRequestBean = JSONHandler.parseFromJSON(data, AddTouristServiceRequestBean.class);
-//    	BaseResponse response= touristService.addTouristService(addTouristServiceRequestBean);
-//    	return JSONHandler.parseToJSON(response);
-//    	
-//    } 
+  
     
     @CrossOrigin()
     @RequestMapping(value="/addServiceProvider" , method= RequestMethod.POST)
@@ -374,15 +366,7 @@ public class BackEndRestController {
     	return JSONHandler.parseToJSON(response);
     	
     }
-    // this is removed
-//    @CrossOrigin()
-//    @RequestMapping(value="/addLocation" , method= RequestMethod.POST)
-//    public String AddLocation(@RequestBody String data) throws Exception{
-//    	AddLocationRequestBean addLocationRequestBean = JSONHandler.parseFromJSON(data, AddLocationRequestBean.class);
-//    	BaseResponse response= locationService.handleLocationDetails(addLocationRequestBean);
-//    	return JSONHandler.parseToJSON(response);
-//    	
-//    }
+  
     
 
 

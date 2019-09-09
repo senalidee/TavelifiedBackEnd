@@ -6,9 +6,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.*;
+import com.cyntex.TourismApp.Exception.BadRequestException;
+import com.cyntex.TourismApp.Exception.PermissionDeniedException;
 import com.cyntex.TourismApp.Persistance.GroupParticipantDAO;
 import com.cyntex.TourismApp.Persistance.MessageDAO;
 import com.cyntex.TourismApp.Persistance.UserDAO;
@@ -26,11 +30,11 @@ public class MesssageServiceHandler {
 	@Autowired
 	private UserDAO userDAO;
 	
-	public BaseResponse handleSendMessage(SendMessageRequestBean requestBean){
-		
-		SendMessageResponseBean responseBean = new SendMessageResponseBean();
-		try{
 	
+	@Transactional(propagation=Propagation.REQUIRED)
+	public void sendMessage(SendMessageRequestBean requestBean) throws Exception{
+		
+
 		 String username=requestBean.getUsername();
 	     int chatGroupId=requestBean.getGroupId();
 		 String message=requestBean.getMessage();
@@ -41,38 +45,24 @@ public class MesssageServiceHandler {
 			 if(groupParticipantDAO.checkExistance( chatGroupId, username) && userDAO.validate(username,firstname)){
 			    messageDAO.saveMessage(chatGroupId,username,firstname,message);
 			 }else{
-				 responseBean.setStatus("FAILED: user is not in the group or username and firstname are not match");
-				 return responseBean;
+				 throw new PermissionDeniedException("FAILED: user is not in the group or username and firstname are not match");
 			 }
-			 
-			 responseBean.setStatus("SUCCESS");
 		 }else{
-			 responseBean.setStatus("FAILED: Check the payload again");
+			 throw new BadRequestException("FAILED: Check the payload again");
+	
 		 }
 
 		
-     } catch (Exception e) {
-    	 responseBean.setStatus("FAILED: error occured "+e.getMessage());
-			
 	}
-		return responseBean;
+	@Transactional
+	public List<SendMessageQueryResponsBean> getMessage(int chatGroupId) throws Exception{
 		
-	}
-	
-	public BaseResponse handleGetMessage(int chatGroupId){
 		
-		GetMessageResponseBean responseBean = new GetMessageResponseBean();
-		try{
-		//	int chatGroupId=getMessageRequestBean.getChatGroupId();
-		 List<SendMessageQueryResponsBean> messageReponseList=messageDAO.getMessageDetails(chatGroupId);
-		 responseBean.setMessageReponseList(messageReponseList);
+		List<SendMessageQueryResponsBean> messageReponseList;
+		messageReponseList=messageDAO.getMessageDetails(chatGroupId);
 		
-		 responseBean.setStatus("SUCCESS");
-	     } catch (Exception e) {
-	    	 responseBean.setStatus("FAILED: error occured "+e.getMessage());
-				
-		}
-			return responseBean;
+		
+		return messageReponseList;
 			
 		}
 	

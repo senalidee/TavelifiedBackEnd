@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.SearchFriendQueryResponseBean;
 import com.cyntex.TourismApp.Beans.SearchFriendResponseBean;
+import com.cyntex.TourismApp.Exception.BadRequestException;
 import com.cyntex.TourismApp.Persistance.UserDAO;
 
 
@@ -21,25 +23,19 @@ public class SearchFriendRequestHandler {
 	@Autowired
 	UserDAO userDAO;
 	
-	
-	public BaseResponse handle(String firstname){
-		SearchFriendResponseBean response= new SearchFriendResponseBean();
+	@Transactional
+	public List<SearchFriendQueryResponseBean> handle(String firstname) throws Exception{
 		
 		 List<SearchFriendQueryResponseBean> friendList;
-		try{
 		if(!StringUtils.isEmpty(firstname)){		
 			friendList=userDAO.getSearchFriend(firstname);
-			response.setStatus("SUCCESS");
-			response.setSearchFriendQueryResponseBean(friendList);
 			
 		}else{
-			response.setStatus("FAILED: Check the payload again");
+			throw new BadRequestException("FAILED: Check the payload again");
+
 		}
-		}catch(Exception e ){
-			response.setStatus("FAILED: "+e.getMessage());
-			
-		}
-		return response;
+
+		return friendList;
 		
 		
 		

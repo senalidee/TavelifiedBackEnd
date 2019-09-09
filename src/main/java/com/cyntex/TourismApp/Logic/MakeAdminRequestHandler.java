@@ -4,11 +4,15 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.cyntex.TourismApp.Beans.BaseResponse;
 import com.cyntex.TourismApp.Beans.MakeAdminRequestBean;
 import com.cyntex.TourismApp.Beans.MakeAdminResponseBean;
+import com.cyntex.TourismApp.Exception.BadRequestException;
+import com.cyntex.TourismApp.Exception.PermissionDeniedException;
 import com.cyntex.TourismApp.Persistance.GroupParticipantDAO;
 
 
@@ -18,39 +22,29 @@ public class MakeAdminRequestHandler {
 	@Autowired
 	GroupParticipantDAO groupParticipantDAO;
 	
-	MakeAdminResponseBean response= new MakeAdminResponseBean();
 	
-	public BaseResponse handle(MakeAdminRequestBean makeAdminRequestBean){
+	
+	@Transactional(propagation=Propagation.REQUIRED)
+	public void makeAdmin(MakeAdminRequestBean makeAdminRequestBean) throws Exception{
 	
 		int chatGroupId=makeAdminRequestBean.getGroupId();
 		String username=makeAdminRequestBean.getUsername();
 		String adminname=makeAdminRequestBean.getAdminname();
-		try{
+	
 			
 		 if(!(StringUtils.isEmpty(username)|| StringUtils.isEmpty(adminname) || chatGroupId==0)){
-			if(groupParticipantDAO.isAdmin(adminname, chatGroupId) && groupParticipantDAO.checkExistance( chatGroupId, username)){
+			if(groupParticipantDAO.isAdmin(adminname, chatGroupId) && groupParticipantDAO.checkExistance( chatGroupId, username) && !groupParticipantDAO.isAdmin(username, chatGroupId)){
 				groupParticipantDAO.makeAdmin(chatGroupId, username);
 				
-				response.setStatus("making admin is successful");
-				
-			}else{response.setStatus("FAILED: you are not an admin or user is not in the group: making admin is unsuccessful");
-			
+			}else{
+				throw new PermissionDeniedException("FAILED: you are not an admin or user is not in the group or user already an admin : making admin is unsuccessful");
+	
 			}
 			
 		 }else{
-			 response.setStatus("FAILED: check the payload again");
-		 }
+			 throw new BadRequestException("FAILED: check the payload again");
 			
-			  return response;
-		}catch(Exception e){
-			response.setStatus("FAILED: making admin is unsuccessful");
-			 return response;
-		}
-		
-//		catch(SQLIntegrityConstraintViolationException e){
-//			response.setStatus("y");
-//			
-//		}
-	}
+		 }
 	
+	}
 }

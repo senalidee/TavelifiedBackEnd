@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +14,17 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 
 @Component
 public class TouristServiceDAO {
+   
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	
-    @Autowired
-    private DataSourceManager dataSourceManager;
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
     
     private static final String getTouristServicesByTitleQuery="select * from tourist_service where service_title = ? ";
 	
@@ -31,18 +40,17 @@ public class TouristServiceDAO {
 	
 	
 	
-	@Transactional
 	public void addTouristService(String serviceTitle,String serviceDescription,String ownername,String titlePhotoUrl,String photoCollectionId,String ratingProfileId,double lng,double lat){
 		
-		dataSourceManager.getJdbcTemplate().update(addTrouristServiceQuery,
+		jdbcTemplate.update(addTrouristServiceQuery,
                 new Object[] {serviceTitle,serviceDescription,ownername,titlePhotoUrl,photoCollectionId,ratingProfileId,lng,lat},
                 new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.INTEGER,Types.DOUBLE,Types.DOUBLE});
 		
 		
 	}
-	@Transactional
+
 	public List<GetTouristServiceQueryResponseBean> getTouristServiceByTitle(String serviceTitle) throws Exception{
-		List<GetTouristServiceQueryResponseBean> queryData=dataSourceManager.getJdbcTemplate().query(getTouristServicesByTitleQuery,
+		List<GetTouristServiceQueryResponseBean> queryData=jdbcTemplate.query(getTouristServicesByTitleQuery,
                 new Object[] {serviceTitle},
                 new int[]{Types.VARCHAR },  (rs, rowNum) -> new GetTouristServiceQueryResponseBean(
                 		rs.getInt("service_id"),rs.getString("service_title"),rs.getString("service_description"),
@@ -57,9 +65,8 @@ public class TouristServiceDAO {
 		
 		
 	}
-	@Transactional
 	public List<GetTouristServiceQueryResponseBean> getAllTouristServices()throws Exception{
-		List<GetTouristServiceQueryResponseBean> queryData=dataSourceManager.getJdbcTemplate().query(getAllTouristServices,
+		List<GetTouristServiceQueryResponseBean> queryData=jdbcTemplate.query(getAllTouristServices,
             (rs, rowNum) -> new GetTouristServiceQueryResponseBean(
                 		rs.getInt("service_id"),rs.getString("service_title"),rs.getString("service_description"),
                 		rs.getString("owner_uname"),rs.getString("title_photo_url"),

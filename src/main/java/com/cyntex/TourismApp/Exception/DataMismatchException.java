@@ -1,6 +1,6 @@
 package com.cyntex.TourismApp.Exception;
 
-public class BadRequestException extends Exception{
+public class DataMismatchException extends Exception{
 
 	/**
 	 * 
@@ -9,9 +9,6 @@ public class BadRequestException extends Exception{
 	
 	private String message;
 
-	
-	
-	
 	public String getMessage() {
 		return message;
 	}
@@ -19,14 +16,11 @@ public class BadRequestException extends Exception{
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-
-
-
-	public BadRequestException(String message) {
-		;
+	
+	public DataMismatchException(String message) {
 		this.message = message;
 	}
+	
 	
 
 }
