@@ -20,7 +20,7 @@ import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionPlaceResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionQueryResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionRequestBean;
 import com.cyntex.TourismApp.Exception.BadRequestException;
-import com.cyntex.TourismApp.Persistance.LocationDetailsDAO;
+
 import com.cyntex.TourismApp.Persistance.TouristAttractionDAO;
 import com.cyntex.TourismApp.Persistance.TouristAttractionPhotoCollectionDAO;
 import com.cyntex.TourismApp.Util.FSManager;

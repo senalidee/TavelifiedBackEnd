@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 import com.cyntex.TourismApp.Beans.AddServiceProviderRequestBean;
 import com.cyntex.TourismApp.Beans.AddServiceProviderResponseBean;
 import com.cyntex.TourismApp.Beans.BaseResponse;
+import com.cyntex.TourismApp.Exception.BadRequestException;
+import com.cyntex.TourismApp.Exception.PermissionDeniedException;
 import com.cyntex.TourismApp.Persistance.ServiceProviderDAO;
 import com.cyntex.TourismApp.Persistance.UserDAO;
 
@@ -25,10 +27,9 @@ public class TouristServiceProvideHandler {
 	ServiceProviderDAO serviceProviderDAO;
 	
 	
-	public BaseResponse addServiceProvider(AddServiceProviderRequestBean addServiceProviderRequestBean){
+	public void addServiceProvider(AddServiceProviderRequestBean addServiceProviderRequestBean) throws  Exception{
 		
 		AddServiceProviderResponseBean response= new AddServiceProviderResponseBean();
-		try{
 		
 			String addedBy=addServiceProviderRequestBean.getAddedBy();
 			int serviceId=addServiceProviderRequestBean.getServiceId();
@@ -40,23 +41,14 @@ public class TouristServiceProvideHandler {
 						
 						serviceProviderDAO.addServiceProvider(serviceId,username);
 					}else{
-						response.setStatus("FAILED :Check the payload");
+						throw new BadRequestException("FAILED :Check the payload");
+						
 					}
-					
-					
-					response.setStatus("SUCCESS");	
+				
 				}else{
-					response.setStatus("FAILED : you are not an admin ");
+					throw new PermissionDeniedException("FAILED : you are not an admin ");
 				}
-		}catch(DuplicateKeyException e){
-			response.setStatus("FAILED : this service provider already exists ");
-			
-		}
-		catch(Exception e){
-			response.setStatus("FAILED: error occured "+e.getMessage());
-			
-		}
-		return response;
+
 	}
 	
 

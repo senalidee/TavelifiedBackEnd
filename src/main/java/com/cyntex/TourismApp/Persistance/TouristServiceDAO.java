@@ -22,34 +22,32 @@ public class TouristServiceDAO {
     
     private static final String getAllTouristServices="select * from tourist_service ";
     
-	private static final String addTrouristFriendQuery="insert into tourist_service(service_title,"
+	private static final String addTrouristServiceQuery="insert into tourist_service(service_title,"
 			+ "service_description,"
 			+ "owner_uname,"
-			+ "location_id,"
 			+ "title_photo_url, "
 			+ "photo_collection_id, "
-			+ "rating_profile_id) values (?,?,?,?,?,?,?)";
+			+ "rating_profile_id, lng, lat) values (?,?,?,?,?,?,?,?)";
 	
 	
 	
 	@Transactional
-	public void addTouristService(String serviceTitle,String serviceDescription,String ownername,String locationId,String titlePhotoUrl,String photoCollectionId,String ratingProfileId){
+	public void addTouristService(String serviceTitle,String serviceDescription,String ownername,String titlePhotoUrl,String photoCollectionId,String ratingProfileId,double lng,double lat){
 		
-		dataSourceManager.getJdbcTemplate().update(addTrouristFriendQuery,
-                new Object[] {serviceTitle,serviceDescription,ownername,locationId,titlePhotoUrl,photoCollectionId,ratingProfileId},
-                new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.INTEGER});
+		dataSourceManager.getJdbcTemplate().update(addTrouristServiceQuery,
+                new Object[] {serviceTitle,serviceDescription,ownername,titlePhotoUrl,photoCollectionId,ratingProfileId,lng,lat},
+                new int[]{Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.INTEGER,Types.DOUBLE,Types.DOUBLE});
 		
 		
 	}
 	@Transactional
-	public List<GetTouristServiceQueryResponseBean> getTouristServiceByTitle(String serviceTitle){
+	public List<GetTouristServiceQueryResponseBean> getTouristServiceByTitle(String serviceTitle) throws Exception{
 		List<GetTouristServiceQueryResponseBean> queryData=dataSourceManager.getJdbcTemplate().query(getTouristServicesByTitleQuery,
                 new Object[] {serviceTitle},
-                new int[]{Types.VARCHAR }, (rs, rowNum) -> new GetTouristServiceQueryResponseBean(
-                		
+                new int[]{Types.VARCHAR },  (rs, rowNum) -> new GetTouristServiceQueryResponseBean(
                 		rs.getInt("service_id"),rs.getString("service_title"),rs.getString("service_description"),
-                		rs.getString("owner_uname"),rs.getString("location_id"),rs.getString("title_photo_url"),
-                		rs.getString("photo_collection_id"),rs.getString("rating_profile_id")
+                		rs.getString("owner_uname"),rs.getString("title_photo_url"),
+                		rs.getString("photo_collection_id"),rs.getString("rating_profile_id"),rs.getDouble("lng"),rs.getDouble("lat")
                 		
                 		
                 		
@@ -60,20 +58,20 @@ public class TouristServiceDAO {
 		
 	}
 	@Transactional
-	public List<GetTouristServiceQueryResponseBean> getAllTouristServices(){
+	public List<GetTouristServiceQueryResponseBean> getAllTouristServices()throws Exception{
 		List<GetTouristServiceQueryResponseBean> queryData=dataSourceManager.getJdbcTemplate().query(getAllTouristServices,
             (rs, rowNum) -> new GetTouristServiceQueryResponseBean(
                 		rs.getInt("service_id"),rs.getString("service_title"),rs.getString("service_description"),
-                		rs.getString("owner_uname"),rs.getString("location_id"),rs.getString("title_photo_url"),
-                		rs.getString("photo_collection_id"),rs.getString("rating_profile_id")
-                		
-                		
-                		
+                		rs.getString("owner_uname"),rs.getString("title_photo_url"),
+                		rs.getString("photo_collection_id"),rs.getString("rating_profile_id"),rs.getDouble("lng"),rs.getDouble("lat")
+                		                		
                 		));
 		
 		return queryData;
 		
 		
 	}
+	
+
 
 }

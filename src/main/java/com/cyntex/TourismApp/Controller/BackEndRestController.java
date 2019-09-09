@@ -16,7 +16,6 @@ import com.cyntex.TourismApp.Services.UserFriendService;
 import com.cyntex.TourismApp.Services.ChatGroupService;
 import com.cyntex.TourismApp.Services.TouristAttractionService;
 import com.cyntex.TourismApp.Services.TouristFriendService;
-import com.cyntex.TourismApp.Services.LocationService;
 import com.cyntex.TourismApp.Services.MakeAdminService;
 import com.cyntex.TourismApp.Services.MessageService;
 import com.cyntex.TourismApp.Services.TouristService;
@@ -85,8 +84,6 @@ public class BackEndRestController {
     @Autowired
     private TouristService touristService;
     
-    @Autowired
-    LocationService locationService;
     
     @RequestMapping(value="/serviceCheck",method= RequestMethod.GET)
     public String serviceCheck() throws Exception{

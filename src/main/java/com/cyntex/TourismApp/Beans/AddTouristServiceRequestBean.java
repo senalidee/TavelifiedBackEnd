@@ -8,17 +8,14 @@ public class AddTouristServiceRequestBean {
 	private String serviceTitle;	
 	private String serviceDescription;	
 	private String ownername;	
-	private String locationId;	
 	private String titlePhoto;	
 	//private String photoCollectionId;	
 	private String ratingProfileId;
 	private String[] photoCollection;
+	private double lng;
+	private double lat;
 	
 	
-	
-	
-	
-
 	
 	
 	public String[] getPhotoCollection() {
@@ -57,27 +54,26 @@ public class AddTouristServiceRequestBean {
 	public void setOwnername(String ownername) {
 		this.ownername = ownername;
 	}
-	public String getLocationId() {
-		return locationId;
-	}
-	public void setLocationId(String locationId) {
-		this.locationId = locationId;
-	}
-
-//	public String getPhotoCollectionId() {
-//		return photoCollectionId;
-//	}
-//	public void setPhotoCollectionId(String photoCollectionId) {
-//		this.photoCollectionId = photoCollectionId;
-//	}
 	public String getRatingProfileId() {
 		return ratingProfileId;
 	}
 	public void setRatingProfileId(String ratingProfileId) {
 		this.ratingProfileId = ratingProfileId;
 	}
+	public double getLng() {
+		return lng;
+	}
+	public void setLng(double lng) {
+		this.lng = lng;
+	}
+	public double getLat() {
+		return lat;
+	}
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
 	
 	
-
+	
 
 }
