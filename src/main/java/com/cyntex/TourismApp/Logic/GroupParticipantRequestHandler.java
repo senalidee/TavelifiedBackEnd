@@ -25,7 +25,7 @@ public class GroupParticipantRequestHandler {
 	GroupParticipantDAO groupParticipantDAO;
 
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class  , timeout=120)
+	@Transactional(rollbackFor= Exception.class  , timeout=120)
 	public void addMember(AddFriendToChatGroupRequestBean addFriendRequestBean) throws Exception{
     	String username=addFriendRequestBean.getUsername();
     	int  chatGroupId=addFriendRequestBean.getChatGroupId();
@@ -44,7 +44,7 @@ public class GroupParticipantRequestHandler {
 
     }
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class ,  timeout=120)
+	@Transactional(rollbackFor= Exception.class ,  timeout=120)
 	public void deleteMember(DeleteChatGroupMemberRequestBean deleteChatGroupMemberRequestBean) throws Exception{
 		AddFriendToChatGroupResponseBean responseBean= new AddFriendToChatGroupResponseBean();
     	String username=deleteChatGroupMemberRequestBean.getUsername();

@@ -88,7 +88,7 @@ public class TouristServiceHandler {
 		return response;
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class, timeout=120)
+	@Transactional(rollbackFor= Exception.class, timeout=120)
 	public List<GetTouristServiceQueryResponseBean> getTouristServiceByTitle(String title) throws Exception{
 		
 		List<GetTouristServiceQueryResponseBean> queryResponseList= new ArrayList();
@@ -102,7 +102,7 @@ public class TouristServiceHandler {
 		return queryResponseList;
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class, timeout=120)
+	@Transactional(rollbackFor= Exception.class, timeout=120)
 	public List<GetTouristServiceQueryResponseBean> getAllTouristServices() throws Exception{
 		List<GetTouristServiceQueryResponseBean> queryResponseList= new ArrayList();	
 			for(GetTouristServiceQueryResponseBean queryResponseBean: touristServiceDAO.getAllTouristServices()){

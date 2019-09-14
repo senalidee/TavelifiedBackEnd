@@ -31,7 +31,7 @@ public class MesssageServiceHandler {
 	private UserDAO userDAO;
 	
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class, timeout=120)
+	@Transactional(rollbackFor= Exception.class, timeout=120)
 	public void sendMessage(SendMessageRequestBean requestBean) throws Exception{
 		
 

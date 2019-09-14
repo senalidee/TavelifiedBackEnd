@@ -20,8 +20,7 @@ import com.cyntex.TourismApp.Util.FSManager;
 @Component
 public class MessageTouristGuideDAO {
 	
-	@Autowired
-	DataSourceManager dataSourceManager;
+
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

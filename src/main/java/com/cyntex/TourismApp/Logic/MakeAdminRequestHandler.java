@@ -24,7 +24,7 @@ public class MakeAdminRequestHandler {
 	
 	
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class,  timeout=120)
+	@Transactional(rollbackFor= Exception.class,  timeout=120)
 	public void makeAdmin(MakeAdminRequestBean makeAdminRequestBean) throws Exception{
 	
 		int chatGroupId=makeAdminRequestBean.getGroupId();

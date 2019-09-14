@@ -21,11 +21,11 @@ public class DataSourceManager {
     
     private JdbcTemplate jdbcTemplate;
 
-    @PostConstruct
-    public void init() {
-        DataSource source = getDataSource();
-        setJdbcTemplate(new JdbcTemplate(source));
-    }
+//    @PostConstruct
+//    public void init() {
+//        DataSource source = getDataSource();
+//        setJdbcTemplate(new JdbcTemplate(source));
+//    }
 
     /**
      * Returns a DataSource object for connection to the database.

@@ -23,7 +23,8 @@ public class ChatGroupDAO {
 	@Autowired
 	GroupParticipantDAO groupParticipantDAO;
 	
-	
+//	@Autowired
+//	private DataSourceManager datasource;
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
