@@ -7,6 +7,7 @@ import com.cyntex.TourismApp.Beans.SearchFriendResponseBean;
 import com.cyntex.TourismApp.Util.DataSourceManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,15 @@ import java.util.List;
 @Component
 public class UserDAO {
 	@Autowired
-	private DataSourceManager dataSourceManager;
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 	
 	 private int response;
 	 
@@ -38,7 +47,7 @@ public class UserDAO {
   
     @Transactional
     public List<AuthenticatedUserBean> getAuthenticatedUser(String username) {
-        List<AuthenticatedUserBean> queryData = dataSourceManager.getJdbcTemplate().query(
+        List<AuthenticatedUserBean> queryData = jdbcTemplate.query(
                 userRetrieveQuery,
                 new Object[]{username},
                 new int[]{Types.VARCHAR},
@@ -61,7 +70,7 @@ public class UserDAO {
     @Transactional
     public DiscoverTouristFriendUserProfileQueryResponseBean getUserRatingsProfile(String username) {
     
-    	DiscoverTouristFriendUserProfileQueryResponseBean queryData = dataSourceManager.getJdbcTemplate().query(
+    	DiscoverTouristFriendUserProfileQueryResponseBean queryData = jdbcTemplate.query(
     			userRetrieveQuery, new Object[]{username}, 
                 (rs, rowNum) -> new DiscoverTouristFriendUserProfileQueryResponseBean(
                 rs.getString("username"),rs.getString("first_name"),rs.getString("last_name"),rs.getString("contact_number"),
@@ -77,7 +86,7 @@ public class UserDAO {
     public List<SearchFriendQueryResponseBean> getSearchFriend(String firstname){
     //	System.out.print(firstname);
     
-    List<SearchFriendQueryResponseBean> queryData=dataSourceManager.getJdbcTemplate().query(
+    List<SearchFriendQueryResponseBean> queryData=jdbcTemplate.query(
     		userRetreveRequestQuery, new Object[]{firstname+"%"}, new int[]{Types.VARCHAR},
             (rs, rowNum) -> new SearchFriendQueryResponseBean(
             rs.getString("username"),rs.getString("first_name"),rs.getString("last_name"),rs.getString("contact_number"),
@@ -91,7 +100,7 @@ public class UserDAO {
     @Transactional
     public boolean validate(String username,String firstname){
     	
-		   dataSourceManager.getJdbcTemplate().query(checkExistance,
+    	jdbcTemplate.query(checkExistance,
 	                new Object[] {username,firstname},
 	                new int[]{Types.VARCHAR,Types.VARCHAR},(rs,rawNo) ->response= rs.getInt("counter"));
 			   
@@ -102,7 +111,7 @@ public class UserDAO {
 	@Transactional
 	public boolean isAdmin(String addedBy){
 		
-	    dataSourceManager.getJdbcTemplate().query(checkIsAdmin,
+		jdbcTemplate.query(checkIsAdmin,
                 new Object[] {addedBy},
                 new int[]{Types.VARCHAR},(rs,rawNo) -> response=rs.getInt("counter"));
               
