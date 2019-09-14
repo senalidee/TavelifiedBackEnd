@@ -31,7 +31,7 @@ public class TouristGuideServiceHandler {
 	@Autowired
 	ServiceProviderDAO serviceProviderDAO; 
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class ,  timeout=120)
 	public void sendMessage(ContactTouristGuideSendMessageRequestBean contactTouristGuideSendMessageRequestBean) throws Exception{
 		
 			int serviceId=contactTouristGuideSendMessageRequestBean.getServiceId();
@@ -57,7 +57,7 @@ public class TouristGuideServiceHandler {
 		
 	}
 	
-	@Transactional
+	@Transactional( timeout=120)
 	public List<ContactTouristGuideGetMessageQueryResponseBean> getMessage(ContactTouristGuideGetMessageRequestBean contactTouristGuideGetMessageRequestBean) throws Exception{
 
 		

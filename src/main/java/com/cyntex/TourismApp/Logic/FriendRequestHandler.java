@@ -26,7 +26,7 @@ public class FriendRequestHandler {
 	@Autowired
 	FriendListDAO friendListDAO;
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class, timeout=120)
 	public void addTouristFriend(AddFriendRequestBean addFriendRequestBean) throws Exception{
 		String username=addFriendRequestBean.getUserName();
 		String friendname=addFriendRequestBean.getFriendName();
@@ -40,7 +40,7 @@ public class FriendRequestHandler {
 			
 	
 	}
-	@Transactional
+	@Transactional(rollbackFor= Exception.class , timeout=120)
 	public List<GetUserFriendQueryResponse> getUserFriend(GetUserFriendRequest getUserFriendRequest )throws Exception{
 		String username=getUserFriendRequest.getUsername();
 		

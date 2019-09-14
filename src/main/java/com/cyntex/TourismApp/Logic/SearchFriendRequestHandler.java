@@ -23,7 +23,7 @@ public class SearchFriendRequestHandler {
 	@Autowired
 	UserDAO userDAO;
 	
-	@Transactional
+	@Transactional(rollbackFor= Exception.class ,  timeout=120)
 	public List<SearchFriendQueryResponseBean> handle(String firstname) throws Exception{
 		
 		 List<SearchFriendQueryResponseBean> friendList;

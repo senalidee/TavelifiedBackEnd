@@ -20,7 +20,6 @@ import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionPlaceResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionQueryResponseBean;
 import com.cyntex.TourismApp.Beans.DiscoverTouristAttractionRequestBean;
 import com.cyntex.TourismApp.Exception.BadRequestException;
-
 import com.cyntex.TourismApp.Persistance.TouristAttractionDAO;
 import com.cyntex.TourismApp.Persistance.TouristAttractionPhotoCollectionDAO;
 import com.cyntex.TourismApp.Util.FSManager;
@@ -37,7 +36,7 @@ public class TouristAttractionRequestHandler {
 	@Autowired
 	TouristAttractionPhotoCollectionDAO touristAttractionPhotoCollectionDAO;
 	
-	@Transactional(propagation=Propagation.REQUIRED)  
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class ,  timeout=120)  
     public void addTouristAttraction(AddTouristAttractionRequestBean addTouristAttractionRequestBean) throws Exception{
     	String attractionName=addTouristAttractionRequestBean.getAttractionName();
     	String description=addTouristAttractionRequestBean.getDescription();
@@ -77,7 +76,7 @@ public class TouristAttractionRequestHandler {
 					
     	
     }
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class ,  timeout=120)
 	public List<DiscoverTouristAttractionPlaceQueryResponseBean> getTouristAttraction(DiscoverTouristAttractionRequestBean discoverTouristAttractionRequestBean) throws Exception{
 		List<DiscoverTouristAttractionPlaceQueryResponseBean> discoverTouristAttractionResponseBeanList= new ArrayList<DiscoverTouristAttractionPlaceQueryResponseBean>();
 		DiscoverTouristAttractionPlaceQueryResponseBean discoverTouristAttractionPlaceQueryResponseBean;

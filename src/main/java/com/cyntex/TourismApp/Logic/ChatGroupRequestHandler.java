@@ -39,7 +39,7 @@ public class ChatGroupRequestHandler {
 	private GroupParticipantDAO groupParticipantDAO;
 	
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor= Exception.class, timeout=120)
 	public BaseResponse createChatGroup(CreateChatGroupRequestBean createChatGroupRequestBean) throws Exception{
 		BaseResponse baseResponse = new BaseResponse();
 		int chatGroupId=createChatGroupRequestBean.getChatGroupId();
@@ -74,7 +74,7 @@ public class ChatGroupRequestHandler {
 		
 	}
 	
-	@Transactional
+	@Transactional(rollbackFor= Exception.class, timeout=120)
 	public List<GetUserChatGroupQueryResponseBean> getUserChatGroup(GetUserChatGroupRequestBean getUserChatGroupRequestBean) throws Exception{
 		
 		String username=getUserChatGroupRequestBean.getUsername();

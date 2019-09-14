@@ -44,7 +44,7 @@ public class DiscoverTouristFriendRequestHandler {
 	private FriendListDAO friendListDAO;
 	
 
-    @Transactional(propagation=Propagation.REQUIRED)
+    @Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class ,  timeout=120)
 	public List<DiscoverTouristFriendUserProfileQueryResponseBean> discoverTouristFriend (
 		DiscoverTouristFriendRequestBean discoverTouristFriendRequestBean) throws Exception {
 		

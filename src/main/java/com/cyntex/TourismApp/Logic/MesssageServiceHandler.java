@@ -31,7 +31,7 @@ public class MesssageServiceHandler {
 	private UserDAO userDAO;
 	
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class, timeout=120)
 	public void sendMessage(SendMessageRequestBean requestBean) throws Exception{
 		
 
@@ -54,7 +54,7 @@ public class MesssageServiceHandler {
 
 		
 	}
-	@Transactional
+	@Transactional(rollbackFor= Exception.class, timeout=120)
 	public List<SendMessageQueryResponsBean> getMessage(int chatGroupId) throws Exception{
 		
 		

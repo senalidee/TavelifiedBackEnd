@@ -28,7 +28,7 @@ public class TouristServiceProvideHandler {
 	@Autowired
 	ServiceProviderDAO serviceProviderDAO;
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor= Exception.class , timeout=120)
 	public void addServiceProvider(AddServiceProviderRequestBean addServiceProviderRequestBean) throws  Exception{
 		
 		AddServiceProviderResponseBean response= new AddServiceProviderResponseBean();
