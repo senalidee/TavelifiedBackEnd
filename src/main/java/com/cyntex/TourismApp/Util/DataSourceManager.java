@@ -3,12 +3,16 @@ package com.cyntex.TourismApp.Util;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionStatus;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 @Component
-public class DataSourceManager {
+public class DataSourceManager{
 //    private static final String DRIVER = "com.mysql.jdbc.Driver";
 //    private static final String JDBC_URL = "jdbc:mysql://sql10.freemysqlhosting.net:3306/sql10304160";
 //    private static final String USERNAME = "sql10304160";
@@ -21,11 +25,11 @@ public class DataSourceManager {
     
     private JdbcTemplate jdbcTemplate;
 
-//    @PostConstruct
-//    public void init() {
-//        DataSource source = getDataSource();
-//        setJdbcTemplate(new JdbcTemplate(source));
-//    }
+    @PostConstruct
+    public void init() {
+        DataSource source = getDataSource();
+        setJdbcTemplate(new JdbcTemplate(source));
+    }
 
     /**
      * Returns a DataSource object for connection to the database.
@@ -52,4 +56,6 @@ public class DataSourceManager {
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+
 }

@@ -40,10 +40,12 @@
 			<version>5.0.2.RELEASE</version>
 		</dependency>
 	 <!--  	using this dependancy it is possible to configure data source automatically -->
-		<dependency>
+ 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
+		</dependency> 
+		
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

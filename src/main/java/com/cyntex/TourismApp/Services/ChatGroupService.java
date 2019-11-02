@@ -29,7 +29,7 @@ public class ChatGroupService {
 		   baseResponse.setStatus(e.getMessage());
 		}catch(Exception e){
 			
-			baseResponse.setStatus("Transaction fails");
+			baseResponse.setStatus("Transaction fails "+e.getMessage());
 			
 		}
 		return baseResponse;

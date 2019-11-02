@@ -12,8 +12,6 @@ import com.cyntex.TourismApp.Util.DataSourceManager;
 
 @Component
 public class TouristServicePhotoCollectionDAO {
-	
-	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
