@@ -6,6 +6,7 @@ import com.cyntex.TourismApp.Beans.RatingsProfileQueryResponseBean;
 import com.cyntex.TourismApp.Util.DataSourceManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,18 @@ import java.util.List;
 
 @Component
 public class UserRatingsProfileDAO {
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
     private static final String ratingsProfileFetchQuery
             = "select * from user_rating_profile where username = ?";
     
@@ -22,12 +35,8 @@ public class UserRatingsProfileDAO {
     
    
 
-    @Autowired
-    private DataSourceManager dataSourceManager;
-
-    @Transactional
     public List<RatingsProfileQueryResponseBean> getUserRatingsProfile(String username) {
-        List<RatingsProfileQueryResponseBean> queryData = dataSourceManager.getJdbcTemplate().query(
+        List<RatingsProfileQueryResponseBean> queryData = jdbcTemplate.query(
                 ratingsProfileFetchQuery,new Object[]{username},new int[]{Types.VARCHAR},
                 (rs, rowNum) -> new RatingsProfileQueryResponseBean(
                         rs.getString("category"), rs.getDouble("rating"))
@@ -35,11 +44,10 @@ public class UserRatingsProfileDAO {
         return queryData;
     }
     
-    
-    @Transactional
+
     public List<DiscoverTouristFriendRatingDetailQueryResponseBean> getAverageRating(String category, String username){
    
-    	List<DiscoverTouristFriendRatingDetailQueryResponseBean> queryData= dataSourceManager.getJdbcTemplate().query(
+    	List<DiscoverTouristFriendRatingDetailQueryResponseBean> queryData= jdbcTemplate.query(
     			findAverageRatingValueFetchQuery,new Object[]{category, username},new int[]{Types.VARCHAR,Types.VARCHAR},
                 (rs, rowNum) -> new DiscoverTouristFriendRatingDetailQueryResponseBean(
                         rs.getString("username"),rs.getDouble("average_rating"))

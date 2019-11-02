@@ -30,6 +30,7 @@ CREATE TABLE `chat_group` (
   `category` varchar(45) DEFAULT NULL,
   `created_by` varchar(45) DEFAULT NULL,
   `created_date` date DEFAULT NULL,
+  `is_active` int(11) DEFAULT '1',
   PRIMARY KEY (`chat_group_id`),
   KEY `created_user_user_idx` (`created_by`),
   CONSTRAINT `created_user_user` FOREIGN KEY (`created_by`) REFERENCES `user` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -103,6 +104,30 @@ CREATE TABLE `group_participant` (
 LOCK TABLES `group_participant` WRITE;
 /*!40000 ALTER TABLE `group_participant` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_participant` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `location`
+--
+
+DROP TABLE IF EXISTS `location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `location` (
+  `location_id` varchar(50) NOT NULL,
+  `lng` double DEFAULT NULL,
+  `lat` double DEFAULT NULL,
+  PRIMARY KEY (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `location`
+--
+
+LOCK TABLES `location` WRITE;
+/*!40000 ALTER TABLE `location` DISABLE KEYS */;
+/*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -205,7 +230,7 @@ CREATE TABLE `tourist_attaraction` (
   `attraction_name` varchar(1000) DEFAULT NULL,
   `description` varchar(5000) DEFAULT NULL,
   `rating_profile_id` varchar(100) DEFAULT NULL,
-  `location_url` varchar(500) DEFAULT NULL,
+  `location_id` varchar(500) DEFAULT NULL,
   `title_photo_url` varchar(100) DEFAULT NULL,
   `photo_collection_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`attaraction_id`)
@@ -344,17 +369,18 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `username` varchar(20) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
   `gender` varchar(45) DEFAULT NULL,
   `country` varchar(45) NOT NULL,
   `contact_number` varchar(45) NOT NULL,
-  `email_address` varchar(45) NOT NULL,
-  `birthday` varchar(45) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
-  `rating_profile_id` varchar(100) DEFAULT NULL,
-  `picture_link` varchar(500) DEFAULT NULL,
-  `fb_token` varchar(500) DEFAULT NULL,
+  `pwd_salt` varchar(500) DEFAULT NULL,
+  `password` varchar(500) DEFAULT NULL,
+  `picture_link` varchar(150) DEFAULT NULL,
+  `location_id` varchar(45) DEFAULT NULL,
+  `is_admin` int(11) DEFAULT NULL,
+  `is_active` int(11) DEFAULT '1',
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -365,7 +391,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('10216489463407145','Isuru','Tharanga','male','Sri Lanka','','isuru.trgz@gmail.com','01/09/1993','10216489463407145','https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10216489463407145&height=50&width=50&ext=1556640515&hash=AeQtcX5c_k63oBlf','EAAgfglcdEMMBAEhJGU8BMN7sZAd74YoOTAu3RfoZBgPltUgCCzOwga3JWFdAtQeVBNhEOBo2Tb1uHA8SjxPvkFK7p3kBmtOpWZAgZBNvhI442v0UcckSAqx5zwsM8paSEQycQibjA7VAxZB9hWI1DITgwmlYqCNVY8SziEEF3C5ZC7lNvYVf2IRnWGI8sBiCOFReRFOQ2eZCVY9d7JvMhVImfcJ58bpRP0ZD');
+INSERT INTO `user` VALUES ('admin1@travelified.com','Senali','Devindi','Female','Sri Lanka','0777123456','8a415ddf','31a5745564c4ee1cc003abbfa021987e1446faf9cdb7f21a1938f56fa70c7044','17becd8e-1466-4d97-89c1-756bfa0f71b5','40926730-5d5f-4dc5-a3fa-e7ca12a947aa',1,1),('user1@travelified.com','Senali','Devindi','Female','Sri Lanka','0777123456','b34ebeac','67773f197dfd5229775942ead3b64a7d73e1c11102fdbe582d0c3b555c5b4edd','96d99648-75df-4ef7-8025-57cd0e4a666b','fc3d523a-b6c4-4f7b-af23-d17bc42ce6ea',NULL,1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -386,7 +412,7 @@ CREATE TABLE `user_rating_profile` (
   KEY `rating_user_idx` (`username`),
   CONSTRAINT `rated_by_user` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `rating_user` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -395,9 +421,16 @@ CREATE TABLE `user_rating_profile` (
 
 LOCK TABLES `user_rating_profile` WRITE;
 /*!40000 ALTER TABLE `user_rating_profile` DISABLE KEYS */;
-INSERT INTO `user_rating_profile` VALUES (2,'10216489463407145','A',3,NULL),(3,'10216489463407145','B',2,NULL),(4,'10216489463407145','A',5,NULL),(5,'10216489463407145','C',3,NULL),(6,'10216489463407145','B',2,NULL),(7,'10216489463407145','A',4,NULL),(8,'10216489463407145','B',5,NULL),(9,'10216489463407145','B',5,NULL),(10,'10216489463407145','B',5,NULL),(11,'10216489463407145','D',2,'10216489463407145'),(12,'10216489463407145','New',3,'10216489463407145'),(13,'10216489463407145','New',5,'10216489463407145'),(14,'10216489463407145','D',1,'10216489463407145'),(15,'10216489463407145','D',1,'10216489463407145'),(16,'10216489463407145','Killer',3,'10216489463407145'),(17,'10216489463407145','Matta',2,'10216489463407145');
 /*!40000 ALTER TABLE `user_rating_profile` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'tourism_app'
+--
+
+--
+-- Dumping routines for database 'tourism_app'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -408,4 +441,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-05  1:42:47
+-- Dump completed on 2019-08-24 12:14:08

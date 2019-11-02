@@ -6,6 +6,7 @@ import com.cyntex.TourismApp.Util.UserRatingCalculator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,16 +23,21 @@ public class RatingProfileRequestHandler {
     private UserRatingCalculator userRatingcalcalculator;
 
     public BaseResponse handle(RatingsProfileRequestBean ratingsProfileRequestBean) {
-        RatingsProfileResponseBean responseBean = new RatingsProfileResponseBean();
+        RatingsProfileResponseBean response = new RatingsProfileResponseBean();
+        String username=ratingsProfileRequestBean.getUsername();
         try {
+        	if(!StringUtils.isEmpty(username)){
             List<RatingsProfileQueryResponseBean> queryResponse =
-                    userRatingsProfileDAO.getUserRatingsProfile(ratingsProfileRequestBean.getUsername());
-            responseBean=userRatingcalcalculator.RatingProfileResponse(queryResponse);
-            responseBean.setStatus("SUCCESS");
+                    userRatingsProfileDAO.getUserRatingsProfile(username);
+            response=userRatingcalcalculator.RatingProfileResponse(queryResponse);
+            response.setStatus("SUCCESS");
+        	}else{
+        		response.setStatus("FAILED: Check the payload again");
+        	}
         } catch (Exception e) {
-            responseBean.setStatus("FAIL");
+        	response.setStatus("FAIL");
         }
 
-        return responseBean;
+        return response;
     }
 }

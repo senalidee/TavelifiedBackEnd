@@ -1,15 +1,14 @@
 package com.cyntex.TourismApp.Beans;
 
-public class DiscoverTouristFriendUserProfileQueryResponseBean extends RegistrationRequestBean{
+public class DiscoverTouristFriendUserProfileQueryResponseBean extends UserBean{
 	
 	
-	 public DiscoverTouristFriendUserProfileQueryResponseBean(String username, String firstName,
-				String lastName, String gender, String country,
-				String contactNumber, String pwdSalt, String password,
-				String pictureLink, String locationId) {
-		 super(username,firstName,lastName,gender,country,contactNumber,pwdSalt,password,pictureLink,locationId);
+	 public DiscoverTouristFriendUserProfileQueryResponseBean(String email, String firstName, String lastName, String phone,
+           String country, String gender, String imageID){
+		 super(email,firstName,lastName,phone,country,gender,imageID);
 
 		}
 
-	    
+//	 UserBean(String email, String firstName, String lastName, String phone,
+//             String country, String gender, String imageID)
 }
